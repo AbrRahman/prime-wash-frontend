@@ -1,8 +1,10 @@
+import HeroBanner from "../../component/shared/home/heroBanner/HeroBanner";
+
 const Home = () => {
   return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
+    <>
+      <HeroBanner />
+    </>
   );
 };
 

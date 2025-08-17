@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 const Header = () => {
   const user = true;
 
-  const menuItems = [{ name: "Home", path: "/" }];
+  const menuItems = [
+    { name: "Home", path: "/" },
+    { name: "Service", path: "/service" },
+    { name: "Booking", path: "/booking" },
+  ];
 
   return (
     <>
@@ -41,7 +45,7 @@ const Header = () => {
                   {menuItems.map((item, index) => (
                     <li
                       key={index}
-                      className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300"
+                      className="text-sky-50 hover:bg-[#0891b2] focus:bg-cyan-600 transition duration-300"
                     >
                       <Link to={item?.path} className="text-sky-50 ">
                         {item?.name}
@@ -66,7 +70,7 @@ const Header = () => {
                   <li key={index}>
                     <Link
                       to={item?.path}
-                      className="text-sky-50 bg-cyan-600 hover:bg-cyan-500 transition duration-300"
+                      className="text-sky-50  hover:bg-cyan-600 tracking-wide font-semibold transition duration-300 mr-3.5"
                     >
                       {item?.name}
                     </Link>
