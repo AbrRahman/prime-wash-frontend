@@ -51,34 +51,36 @@ const AchievementsOverview = () => {
   return (
     <>
       <section className="bg-brand-primary pb-12 lg:pb-20">
-        <div
-          ref={ref}
-          className="container px-4 mx-auto bg-brand-secondary rounded-sm py-8 lg:py-12"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {achievementsItems.map((item) => {
-              return (
-                <motion.div
-                  key={item?.id}
-                  className="flex justify-center items-center gap-3"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  viewport={{ once: true }}
-                >
-                  <span className="text-sky-50 text-4xl lg:text-6xl p-2.5 ">
-                    {item?.icon}
-                  </span>
-                  <div>
-                    <h3 className="text-sky-50 text-2xl lg:text-3xl font-bold">
-                      {inView ? <Counter to={item?.value} /> : item?.value}
-                      {item?.unit}
-                    </h3>
-                    <p className="text-slate-400">{item?.label}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
+        <div className="container mx-auto px-4">
+          <div
+            ref={ref}
+            className="container mx-auto bg-brand-secondary rounded-sm py-8 lg:py-12"
+          >
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {achievementsItems.map((item) => {
+                return (
+                  <motion.div
+                    key={item?.id}
+                    className="flex justify-center items-center gap-3 px-2"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                  >
+                    <span className="text-sky-50 text-4xl lg:text-6xl p-2.5 ">
+                      {item?.icon}
+                    </span>
+                    <div>
+                      <h3 className="text-sky-50 text-2xl lg:text-3xl font-bold">
+                        {inView ? <Counter to={item?.value} /> : item?.value}
+                        {item?.unit}
+                      </h3>
+                      <p className="text-slate-400">{item?.label}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>

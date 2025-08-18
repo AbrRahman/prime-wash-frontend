@@ -98,7 +98,7 @@ const FeaturedServices = () => {
           >
             <Link
               to={`/services`}
-              className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide"
+              className="text-sky-50 bg-cyan-600 px-4 py-2 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide"
             >
               See All Services
             </Link>
