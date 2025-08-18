@@ -64,17 +64,18 @@ const FeaturedServices = () => {
       <section className="bg-brand-primary">
         <div className="container px-5 mx-auto py-12 lg:py-20">
           <motion.h1
-            className=" text-sky-50 text-2xl md:text-3xl lg:text-4xl text-center tracking-wide"
+            className=" text-sky-50 text-2xl md:text-3xl lg:text-4xl text-center font-semibold tracking-wide"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
           >
             Our Popular Car Wash Services
           </motion.h1>
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             variants={{
               hidden: { opacity: 0 },
               visible: {
@@ -93,6 +94,7 @@ const FeaturedServices = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
           >
             <Link
               to={`/services`}

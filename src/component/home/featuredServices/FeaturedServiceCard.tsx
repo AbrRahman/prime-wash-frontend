@@ -47,7 +47,7 @@ const FeaturedServiceCard = ({ service }: { service: TServiceCardProps }) => {
             >
               Details
             </Link>
-            <button className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide">
+            <button className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer">
               Book Now
             </button>
           </div>
