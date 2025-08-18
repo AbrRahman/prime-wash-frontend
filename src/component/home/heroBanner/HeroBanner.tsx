@@ -1,12 +1,11 @@
-import banner1 from "../../../../assets/images/banner-img-1.png";
-import banner2 from "../../../../assets/images/banner-img-2.png";
-import banner3 from "../../../../assets/images/banner-img-3.png";
+import banner1 from "../../../assets/images/banner-img-1.png";
+import banner2 from "../../../assets/images/banner-img-2.png";
+import banner3 from "../../../assets/images/banner-img-3.png";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import HeroBannerItem from "./HeroBannerItem";
 import "swiper/css";
 import "swiper/css/pagination";
-
 // banner items
 const bannerItems = [
   {
@@ -46,10 +45,10 @@ const HeroBanner = () => {
             speed={800}
             loop={true}
             modules={[Pagination, Autoplay]}
-            className="mySwiper"
+            className="mySwiper relative -z-20"
           >
             {bannerItems.map((item, index) => (
-              <SwiperSlide key={index} className="pb-3 lg:pb-0">
+              <SwiperSlide key={index} className="pb-3 lg:pb-0 relative -z-20">
                 <HeroBannerItem bannerItem={item} />
               </SwiperSlide>
             ))}

@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <>
-      <div className=" bg-brand-primary">
+      <div className=" bg-brand-primary sticky z-50">
         <div className="container  mx-auto px-4 sm:py-2">
           <div className="navbar">
             <div className="navbar-start">
@@ -96,7 +96,7 @@ const Header = () => {
                   </div>
                   <ul
                     tabIndex={0}
-                    className="menu menu-sm dropdown-content bg-brand-secondary rounded-box z-1 mt-3 w-52 p-2 shadow"
+                    className="menu menu-sm dropdown-content bg-brand-secondary rounded-box !z-50 mt-3 w-52 p-2 shadow"
                   >
                     <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
                       <Link to="" className="justify-between">
