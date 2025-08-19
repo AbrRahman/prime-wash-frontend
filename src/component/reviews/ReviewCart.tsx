@@ -1,4 +1,5 @@
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+import { motion } from "framer-motion";
 type TRatingProps = {
   value: number;
   outOf?: number;
@@ -23,7 +24,14 @@ const ReviewCart = () => {
   };
   return (
     <>
-      <div className="bg-brand-secondary p-6 rounded-lg shadow-lg space-y-2">
+      <motion.div
+        className="bg-brand-secondary p-6 rounded-lg shadow-lg space-y-2"
+        variants={{
+          hidden: { opacity: 0, y: 50 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        transition={{ duration: 0.8 }}
+      >
         <Rating value={2.5} />
         <p className="text-slate-400 text-lg font-semibold  tracking-wide">
           Good overall wash. Took a bit longer than expected but the results
@@ -37,7 +45,7 @@ const ReviewCart = () => {
           />
           <h1 className="text-sky-50 text-base font-bold mt-1">Sophia M.</h1>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

@@ -20,10 +20,22 @@ const HomeReviewsAndRatings = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-8 lg:mt-12">
             <div>
-              <div className="grid grid-clos-1 gap-3">
+              <motion.div
+                className="grid grid-clos-1 gap-3"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.3 },
+                  },
+                }}
+              >
                 <ReviewCart />
                 <ReviewCart />
-              </div>
+              </motion.div>
               <motion.div
                 className="flex justify-center mt-8 lg:mt-12"
                 initial={{ opacity: 0, scale: 0.8 }}

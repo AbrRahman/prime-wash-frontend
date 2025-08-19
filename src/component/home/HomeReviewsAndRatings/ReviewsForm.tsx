@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
-
+import { motion } from "framer-motion";
 const ReviewsForm = () => {
   const user = false;
   return (
     <>
-      <div className="bg-brand-secondary py-6 px-4 lg:px-6 lg:py-7 rounded-lg shadow-lg">
+      <motion.div
+        className="bg-brand-secondary py-6 px-4 lg:px-6 lg:py-7 rounded-lg shadow-lg"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <div className="relative">
           {!user && (
             <div className="bg-white/1 backdrop-blur-sm absolute inset-0 z-10 rounded-lg flex justify-center items-center">
@@ -106,7 +112,7 @@ const ReviewsForm = () => {
             </form>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };
