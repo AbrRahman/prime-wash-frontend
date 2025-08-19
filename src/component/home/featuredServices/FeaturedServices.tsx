@@ -64,7 +64,7 @@ const FeaturedServices = () => {
       <section className="bg-brand-primary">
         <div className="container px-5 mx-auto py-12 lg:py-20">
           <motion.h1
-            className=" text-sky-50 text-2xl md:text-3xl lg:text-4xl text-center font-semibold tracking-wide"
+            className=" text-sky-50 text-2xl md:text-3xl lg:text-4xl text-center font-bold"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
