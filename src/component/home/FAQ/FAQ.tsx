@@ -40,7 +40,7 @@ const FAQ = () => {
   return (
     <>
       <section className="bg-brand-primary">
-        <div className="container mx-auto px-4 pb-12 lg:b-20">
+        <div className="container mx-auto px-4 pb-12 lg:pb-20">
           {/* section heading */}
           <motion.h1
             className=" text-sky-50 text-2xl md:text-3xl lg:text-4xl text-center font-bold "

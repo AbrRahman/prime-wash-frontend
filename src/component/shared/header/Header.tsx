@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <>
       <div className=" bg-brand-primary sticky z-50">
-        <div className="container  mx-auto px-4 sm:py-2">
+        <div className="container  mx-auto sm:py-2">
           <div className="navbar">
             <div className="navbar-start">
               {/* mobile menu */}
