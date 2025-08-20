@@ -5,7 +5,7 @@ const Header = () => {
 
   const menuItems = [
     { name: "Home", path: "/" },
-    { name: "Service", path: "/service" },
+    { name: "Service", path: "/services" },
     { name: "Booking", path: "/booking" },
   ];
 

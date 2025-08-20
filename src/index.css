@@ -6,5 +6,5 @@ body {
 @theme {
   --color-brand-primary: #001c44;
   --color-brand-secondary: #012a5e;
-  --color-brand-footer: #000e22;
+  /* --color-brand-footer: #000e22; */
 }

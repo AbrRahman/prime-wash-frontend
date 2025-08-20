@@ -1,7 +1,7 @@
-import FeaturedServiceCard from "./FeaturedServiceCard";
 import carImag from "../../../assets/images/car-1.png";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import ServiceCard from "../../services/ServiceCard";
 
 const FeaturedServices = () => {
   const serviceData = [
@@ -86,7 +86,7 @@ const FeaturedServices = () => {
             className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8 lg:mt-12"
           >
             {serviceData.map((service) => (
-              <FeaturedServiceCard key={service._id} service={service} />
+              <ServiceCard key={service._id} service={service} />
             ))}
           </motion.div>
           <motion.div

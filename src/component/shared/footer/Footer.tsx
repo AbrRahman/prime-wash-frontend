@@ -174,11 +174,17 @@ const Footer = () => {
           </div>
           <div className="pt-8 lg:pt-12">
             <hr className="text-slate-500" />
-            <h4 className="text-slate-300 text-sm text-center py-4 lg:py-8">
+            <motion.h4
+              className="text-slate-300 text-sm text-center py-4 lg:py-8"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.3 }}
+              viewport={{ once: true, amount: 0.2 }}
+            >
               {" "}
               © {new Date().getFullYear()} PrimeWash. All rights reserved by Ab
               Rahman
-            </h4>
+            </motion.h4>
           </div>
         </div>
       </section>

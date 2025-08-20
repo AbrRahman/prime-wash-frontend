@@ -9,7 +9,7 @@ type TServiceCardProps = {
 import { SiTicktick } from "react-icons/si";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-const FeaturedServiceCard = ({ service }: { service: TServiceCardProps }) => {
+const ServiceCard = ({ service }: { service: TServiceCardProps }) => {
   return (
     <>
       <motion.div
@@ -57,4 +57,4 @@ const FeaturedServiceCard = ({ service }: { service: TServiceCardProps }) => {
   );
 };
 
-export default FeaturedServiceCard;
+export default ServiceCard;
