@@ -1,11 +1,8 @@
 const BookingForm = () => {
   return (
     <>
-      <div className=" py-6 px-4 lg:px-6 lg:py-7 rounded-sm shadow-sm">
-        <h2 className="text-sky-50 text-2xl pl-4 lg:pl-6 font-semibold">
-          Booking
-        </h2>
-        <div className="py-6 px-4 lg:px-6 lg:py-7 ">
+      <div className=" pb-6 px-4  lg:pb-7 rounded-sm shadow-sm">
+        <div className="py-b px-4 lg:px-6 lg:pb-7 ">
           <form action="" className="space-y-4 lg:space-y-6">
             {/* text input */}
             <div>
