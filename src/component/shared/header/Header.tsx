@@ -99,14 +99,27 @@ const Header = () => {
                     className="menu menu-sm dropdown-content bg-brand-secondary rounded-box !z-50 mt-3 w-52 p-2 shadow"
                   >
                     <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
-                      <Link to="" className="justify-between">
+                      <Link to="/dashboard/profile" className="justify-between">
                         Profile
-                        <span className="badge">New</span>
                       </Link>
                     </li>
-                    <li>
-                      <a>Settings</a>
+                    <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
+                      <Link
+                        to="/dashboard/my-booking"
+                        className="justify-between"
+                      >
+                        My Bookings
+                      </Link>
                     </li>
+                    <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
+                      <Link
+                        to="/dashboard/upcoming-booking"
+                        className="justify-between"
+                      >
+                        Upcoming Booking
+                      </Link>
+                    </li>
+
                     <li>
                       <a>Logout</a>
                     </li>

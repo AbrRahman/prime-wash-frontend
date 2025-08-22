@@ -5,6 +5,9 @@ import Services from "../pages/services/Services";
 import ServiceDetails from "../pages/servicesDetails/ServiceDetails";
 import Booking from "../pages/booking/Booking";
 import NotFound from "../pages/notFound/NotFound";
+import UserLayout from "../layouts/UserLayout";
+import ProfileDetails from "../pages/profile/ProfileDetails";
+import MyBookings from "../pages/myBookings/MyBookings";
 
 const appRouter = createBrowserRouter([
   {
@@ -14,7 +17,21 @@ const appRouter = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/services", element: <Services /> },
       { path: "/services/:id", element: <ServiceDetails /> },
-      { path: "booking", element: <Booking /> },
+      { path: "/booking", element: <Booking /> },
+      {
+        path: "/dashboard",
+        element: <UserLayout />,
+        children: [
+          {
+            path: "profile",
+            element: <ProfileDetails />,
+          },
+          {
+            path: "my-booking",
+            element: <MyBookings />,
+          },
+        ],
+      },
     ],
   },
   {
