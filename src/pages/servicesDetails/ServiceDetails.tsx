@@ -1,6 +1,7 @@
 import { SiTicktick } from "react-icons/si";
 import carImage from "../../assets/images/car-1.png";
 import CalendarAndSlot from "../../component/calendarAndSlot/CalendarAndSlot";
+import { Link } from "react-router-dom";
 const ServiceDetails = () => {
   const serviceItem = {
     name: "Exterior Wash",
@@ -12,7 +13,7 @@ const ServiceDetails = () => {
   return (
     <>
       <div className="bg-brand-primary">
-        <div className="container mx-auto px-4 py-6 lg:py-10">
+        <div className="container mx-auto px-4 pt-6 pb-12 lg:pt-10 lg:pb-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* service image */}
             <div>
@@ -41,6 +42,14 @@ const ServiceDetails = () => {
               </div>
               <div>
                 <CalendarAndSlot />
+              </div>
+              <div className="mt-3.5 lg:mt-5">
+                <Link
+                  to={`/booking`}
+                  className="text-sky-50 bg-cyan-600 px-4 py-2 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide"
+                >
+                  Booking
+                </Link>
               </div>
             </div>
           </div>
