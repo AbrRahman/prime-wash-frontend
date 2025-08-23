@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiEdit } from "react-icons/fi";
-
+import profileImage from "../../assets/images/member1.png";
 const ProfileDetails = () => {
   const [editProfile, serEditProfile] = useState(false);
-  console.log(editProfile);
+  const [profileImg, setProfileImg] = useState(profileImage);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const handleFileFiled = () => {
+    fileRef?.current?.click();
+  };
+  useEffect(() => {
+    const file = fileRef.current;
+    console.log(file);
+    // if (file) {
+    // //   const objectUrl = URL.createObjectURL(file);
+    //   setProfileImg(objectUrl);
+    // }
+  }, [fileRef]);
   return (
     <>
       <div className="flex justify-between items-center border-b-2 border-dashed pb-6 border-b-brand-primary ">
@@ -105,6 +117,28 @@ const ProfileDetails = () => {
                       className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
                     />
                   </div>
+                </div>
+              </div>
+              <div className="space-y-8">
+                <div className="space-y-1">
+                  <h3 className="text-base text-slate-400 font-semibold">
+                    Change Profile Image
+                  </h3>
+                  <div
+                    className="w-1/4 h-1/4 cursor-pointer"
+                    onClick={handleFileFiled}
+                  >
+                    <img
+                      src={profileImg}
+                      alt=""
+                      className="w-full rounded-full"
+                    />
+                  </div>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    className="text-brand-secondary"
+                  />
                 </div>
               </div>
             </div>
