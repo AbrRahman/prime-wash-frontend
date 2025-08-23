@@ -9,6 +9,7 @@ import UserLayout from "../layouts/UserLayout";
 import ProfileDetails from "../pages/profile/ProfileDetails";
 import MyBookings from "../pages/myBookings/MyBookings";
 import UpcomingBooking from "../pages/upcomingBooking/UpcomingBooking";
+import AdminDashboardLayout from "../layouts/AdminDashboardLayout";
 
 const appRouter = createBrowserRouter([
   {
@@ -38,6 +39,14 @@ const appRouter = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/admin",
+    element: "",
+  },
+  {
+    path: "/admin/dashboard",
+    element: <AdminDashboardLayout />,
   },
   {
     path: "*",
