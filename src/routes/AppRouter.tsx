@@ -8,6 +8,7 @@ import NotFound from "../pages/notFound/NotFound";
 import UserLayout from "../layouts/UserLayout";
 import ProfileDetails from "../pages/profile/ProfileDetails";
 import MyBookings from "../pages/myBookings/MyBookings";
+import UpcomingBooking from "../pages/upcomingBooking/UpcomingBooking";
 
 const appRouter = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const appRouter = createBrowserRouter([
           {
             path: "my-booking",
             element: <MyBookings />,
+          },
+          {
+            path: "upcoming-booking",
+            element: <UpcomingBooking />,
           },
         ],
       },

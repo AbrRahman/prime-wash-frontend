@@ -42,32 +42,3 @@ const MyBookings = () => {
 };
 
 export default MyBookings;
-
-//  [
-//         {
-//             "_id": "60d9c4e4f3b4b544b8b8d1c7",
-//             "service": {
-//                 "_id": "60d9c4e4f3b4b544b8b8d1c5",
-//                 "name": "Car Wash",
-//                 "description": "Exterior and interior car cleaning",
-//                 "price": 50,
-//                 "duration": 30,
-//                 "isDeleted": false
-//             },
-//             "slot": {
-//                 "_id": "60d9c4e4f3b4b544b8b8d1c6",
-//                 "service": "60d9c4e4f3b4b544b8b8d1c5",
-//                 "date": "2024-06-15",
-//                 "startTime": "09:00",
-//                 "endTime": "09:30",
-//                 "isBooked": "booked"
-//             },
-//             "vehicleType": "car",
-//             "vehicleBrand": "Toyota",
-//             "vehicleModel": "Camry",
-//             "manufacturingYear": 2020,
-//             "registrationPlate": "ABC123",
-//             "createdAt": "2024-06-15T12:00:00Z",
-//             "updatedAt": "2024-06-15T12:00:00Z"
-//         }
-//     ]
