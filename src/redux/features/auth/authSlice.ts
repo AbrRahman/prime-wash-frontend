@@ -4,17 +4,33 @@ import type { TUser } from "../../../types/auth.type";
 type TAuthInitialState = {
   user: TUser | null;
   token: string | null;
+  googleUiu: string | null;
 };
 
 const initialState: TAuthInitialState = {
   user: null,
   token: null,
+  googleUiu: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, actions) => {
+      const { user, token, uiu } = actions.payload;
+      state.user = user;
+      state.token = token;
+      state.googleUiu = uiu;
+    },
+    logOut: (state) => {
+      state.user = null;
+      state.token = null;
+      state.googleUiu = null;
+    },
+  },
 });
+
+export const { setUser, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
