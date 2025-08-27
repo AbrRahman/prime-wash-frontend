@@ -1,15 +1,8 @@
-type TServiceCardProps = {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  duration: number;
-  image: string;
-};
 import { SiTicktick } from "react-icons/si";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-const ServiceCard = ({ service }: { service: TServiceCardProps }) => {
+import type { TService } from "../../types/service.type";
+const ServiceCard = ({ service }: { service: TService }) => {
   return (
     <>
       <motion.div

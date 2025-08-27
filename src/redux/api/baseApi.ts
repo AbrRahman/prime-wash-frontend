@@ -1,10 +1,9 @@
 import {
-  createApi,
-  fetchBaseQuery,
   type BaseQueryFn,
   type FetchArgs,
   type FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../features/store";
 import { logOut, setUser } from "../features/auth/authSlice";
 
@@ -21,7 +20,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithReauthToken: BaseQueryFn<
-  FetchArgs,
+  string | FetchArgs,
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
@@ -34,7 +33,6 @@ const baseQueryWithReauthToken: BaseQueryFn<
       method: "POST",
       credentials: "include",
     });
-    console.log(res);
     const data = await res.json();
     if (data?.data?.accessToken) {
       const user = (api.getState() as RootState).auth.user;

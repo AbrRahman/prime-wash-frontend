@@ -1,64 +1,66 @@
-import carImag from "../../../assets/images/car-1.png";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import ServiceCard from "../../services/ServiceCard";
+import { useGetAllServiceQuery } from "../../../redux/features/service/serviceApi";
+import type { TService } from "../../../types/service.type";
 
 const FeaturedServices = () => {
-  const serviceData = [
-    {
-      _id: "srv001",
-      name: "Exterior Wash",
-      description:
-        "Quick exterior cleaning with foam and rinse for a fresh look.",
-      price: 500,
-      duration: 20,
-      image: carImag,
-    },
-    {
-      _id: "srv002",
-      name: "Interior Detailing",
-      description:
-        "Deep cleaning of seats, carpets, and dashboard for a spotless interior.",
-      price: 1200,
-      duration: 45,
-      image: carImag,
-    },
-    {
-      _id: "srv003",
-      name: "Full Body Wash",
-      description:
-        "Complete wash inside and out with premium shampoo and wax finish.",
-      price: 1500,
-      duration: 60,
-      image: carImag,
-    },
-    {
-      _id: "srv004",
-      name: "Engine Bay Cleaning",
-      description:
-        "Safe and effective cleaning of engine bay to improve performance.",
-      price: 2000,
-      duration: 50,
-      image: carImag,
-    },
-    {
-      _id: "srv005",
-      name: "Wax & Shine",
-      description: "Protective wax coating with polish for long-lasting shine.",
-      price: 1000,
-      duration: 40,
-      image: carImag,
-    },
-    {
-      _id: "srv006",
-      name: "Premium Detailing Package",
-      description:
-        "Complete detailing package including wash, polish, and interior clean.",
-      price: 2500,
-      duration: 90,
-      image: carImag,
-    },
-  ];
+  const { data: serviceData } = useGetAllServiceQuery(undefined);
+
+  //   {
+  //     _id: "srv001",
+  //     name: "Exterior Wash",
+  //     description:
+  //       "Quick exterior cleaning with foam and rinse for a fresh look.",
+  //     price: 500,
+  //     duration: 20,
+  //     image: carImag,
+  //   },
+  //   {
+  //     _id: "srv002",
+  //     name: "Interior Detailing",
+  //     description:
+  //       "Deep cleaning of seats, carpets, and dashboard for a spotless interior.",
+  //     price: 1200,
+  //     duration: 45,
+  //     image: carImag,
+  //   },
+  //   {
+  //     _id: "srv003",
+  //     name: "Full Body Wash",
+  //     description:
+  //       "Complete wash inside and out with premium shampoo and wax finish.",
+  //     price: 1500,
+  //     duration: 60,
+  //     image: carImag,
+  //   },
+  //   {
+  //     _id: "srv004",
+  //     name: "Engine Bay Cleaning",
+  //     description:
+  //       "Safe and effective cleaning of engine bay to improve performance.",
+  //     price: 2000,
+  //     duration: 50,
+  //     image: carImag,
+  //   },
+  //   {
+  //     _id: "srv005",
+  //     name: "Wax & Shine",
+  //     description: "Protective wax coating with polish for long-lasting shine.",
+  //     price: 1000,
+  //     duration: 40,
+  //     image: carImag,
+  //   },
+  //   {
+  //     _id: "srv006",
+  //     name: "Premium Detailing Package",
+  //     description:
+  //       "Complete detailing package including wash, polish, and interior clean.",
+  //     price: 2500,
+  //     duration: 90,
+  //     image: carImag,
+  //   },
+  // ];
   return (
     <>
       <section className="bg-brand-primary">
@@ -85,7 +87,10 @@ const FeaturedServices = () => {
             }}
             className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8 lg:mt-12"
           >
-            {serviceData.map((service) => (
+            {(serviceData?.length > 6
+              ? serviceData.slice(0, 6)
+              : serviceData
+            ).map((service: TService) => (
               <ServiceCard key={service._id} service={service} />
             ))}
           </motion.div>
