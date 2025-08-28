@@ -1,15 +1,33 @@
 import { SiTicktick } from "react-icons/si";
-import carImage from "../../assets/images/car-1.png";
 import CalendarAndSlot from "../../component/calendarAndSlot/CalendarAndSlot";
-import { Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetSingleServiceQuery } from "../../redux/features/service/serviceApi";
+import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
+import { setServiceId } from "../../redux/features/booking/bookingSlice";
+import { useState } from "react";
 const ServiceDetails = () => {
-  const serviceItem = {
-    name: "Exterior Wash",
-    description:
-      "Quick exterior cleaning with foam and rinse for a fresh look.",
-    price: 500,
-    duration: 20,
+  const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useAppDispatch();
+  const { serviceId, slotId, bookingDate } = useAppSelector(
+    (state) => state.booking
+  );
+
+  // catch service id throw url
+  const { id } = useParams();
+  const { data: serviceItem } = useGetSingleServiceQuery(id);
+  dispatch(setServiceId(serviceItem?._id));
+
+  const navigate = useNavigate();
+
+  // handle Proceed to Pay btn
+  const handleProceedToPay = () => {
+    if (serviceId && slotId && bookingDate) {
+      navigate(`/booking?from=service-details`);
+    } else {
+      setErrorMessage("Select time and slot");
+    }
   };
+
   return (
     <>
       <div className="bg-brand-primary">
@@ -17,7 +35,11 @@ const ServiceDetails = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* service image */}
             <div>
-              <img className="w-full" src={carImage} alt="" />
+              <img
+                className="w-full"
+                src={serviceItem?.image}
+                alt="car image"
+              />
             </div>
 
             {/* details information */}
@@ -44,12 +66,14 @@ const ServiceDetails = () => {
                 <CalendarAndSlot />
               </div>
               <div className="mt-3.5 lg:mt-5">
-                <Link
-                  to={`/booking`}
-                  className="text-sky-50 bg-cyan-600 px-4 py-2 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide"
+                <p className=" text-sm text-red-500 pb-3">{errorMessage}</p>
+
+                <button
+                  onClick={handleProceedToPay}
+                  className="text-sky-50 bg-cyan-600 px-4 py-2 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer"
                 >
-                  Booking
-                </Link>
+                  Proceed to Pay
+                </button>
               </div>
             </div>
           </div>

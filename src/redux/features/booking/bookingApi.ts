@@ -1,32 +1,32 @@
 import { baseApi } from "../../api/baseApi";
-type TServiceParams = {
+type TSlotParams = {
   name: string;
   value: string;
 };
-const serviceApi = baseApi.injectEndpoints({
+
+const bookingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllService: builder.query({
-      providesTags: ["service"],
+    getAllSlot: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
         if (args) {
-          args.forEach((item: TServiceParams) => {
+          args.forEach((item: TSlotParams) => {
             params.append(item.name, item.value);
           });
         }
         return {
-          url: `/service`,
+          url: "/slot",
           method: "GET",
           params: params,
         };
       },
       transformResponse: (data) => {
-        return data.data;
+        return data?.data;
       },
     }),
-    getSingleService: builder.query({
-      query: (args) => ({
-        url: `/service/${args}`,
+    getSingleSlot: builder.query({
+      query: (id) => ({
+        url: `/slot/${id}`,
         method: "GET",
       }),
       transformResponse: (data) => {
@@ -34,7 +34,6 @@ const serviceApi = baseApi.injectEndpoints({
       },
     }),
   }),
-  // overrideExisting: false,
 });
 
-export const { useGetAllServiceQuery, useGetSingleServiceQuery } = serviceApi;
+export const { useGetAllSlotQuery, useGetSingleSlotQuery } = bookingApi;

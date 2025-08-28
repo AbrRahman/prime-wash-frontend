@@ -69,6 +69,13 @@ const Services = () => {
                   <ServiceCard key={service?._id} service={service} />
                 ))}
               </div>
+              {!serviceData?.length && (
+                <div className=" flex justify-center item-center py-12 lg:py-20">
+                  <h3 className=" text-sky-50 text-xl">
+                    Oops! Product not found.
+                  </h3>
+                </div>
+              )}
             </div>
           </div>
         </div>

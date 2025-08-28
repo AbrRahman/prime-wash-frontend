@@ -37,7 +37,7 @@ const FeaturedServices = () => {
             {(serviceData?.length > 6
               ? serviceData.slice(0, 6)
               : serviceData
-            ).map((service: TService) => (
+            )?.map((service: TService) => (
               <ServiceCard key={service?._id} service={service} />
             ))}
           </motion.div>

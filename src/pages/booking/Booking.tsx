@@ -1,9 +1,12 @@
+import { useSearchParams } from "react-router-dom";
 import BookingForm from "../../component/booking/BookingForm";
 import BookingService from "../../component/booking/BookingService";
 import BookingServiceSelection from "../../component/booking/BookingServiceSelection";
 import CalendarAndSlot from "../../component/calendarAndSlot/CalendarAndSlot";
 
 const Booking = () => {
+  const [searchParams] = useSearchParams();
+  const queryParams = searchParams.get("from");
   return (
     <>
       <div className="bg-brand-primary">
@@ -13,9 +16,14 @@ const Booking = () => {
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div>
-              <BookingServiceSelection />
-              <BookingService />
-              <CalendarAndSlot />
+              {/* <BookingServiceSelection /> */}
+              {queryParams == "service-details" || queryParams == "card" ? (
+                <BookingService />
+              ) : (
+                <BookingServiceSelection />
+              )}
+
+              {queryParams != "service-details" && <CalendarAndSlot />}
             </div>
             <div>
               <BookingForm />
