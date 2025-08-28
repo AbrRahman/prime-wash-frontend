@@ -7,6 +7,7 @@ const serviceApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllService: builder.query({
       query: (args) => {
+        console.log(args);
         const params = new URLSearchParams();
         if (args) {
           args.forEach((item: TServiceParams) => {
@@ -20,7 +21,6 @@ const serviceApi = baseApi.injectEndpoints({
         };
       },
       transformResponse: (data) => {
-        console.log(data);
         return data.data;
       },
     }),

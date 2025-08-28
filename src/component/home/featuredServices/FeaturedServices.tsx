@@ -5,62 +5,9 @@ import { useGetAllServiceQuery } from "../../../redux/features/service/serviceAp
 import type { TService } from "../../../types/service.type";
 
 const FeaturedServices = () => {
+  // fetch service data using rtk query
   const { data: serviceData } = useGetAllServiceQuery(undefined);
 
-  //   {
-  //     _id: "srv001",
-  //     name: "Exterior Wash",
-  //     description:
-  //       "Quick exterior cleaning with foam and rinse for a fresh look.",
-  //     price: 500,
-  //     duration: 20,
-  //     image: carImag,
-  //   },
-  //   {
-  //     _id: "srv002",
-  //     name: "Interior Detailing",
-  //     description:
-  //       "Deep cleaning of seats, carpets, and dashboard for a spotless interior.",
-  //     price: 1200,
-  //     duration: 45,
-  //     image: carImag,
-  //   },
-  //   {
-  //     _id: "srv003",
-  //     name: "Full Body Wash",
-  //     description:
-  //       "Complete wash inside and out with premium shampoo and wax finish.",
-  //     price: 1500,
-  //     duration: 60,
-  //     image: carImag,
-  //   },
-  //   {
-  //     _id: "srv004",
-  //     name: "Engine Bay Cleaning",
-  //     description:
-  //       "Safe and effective cleaning of engine bay to improve performance.",
-  //     price: 2000,
-  //     duration: 50,
-  //     image: carImag,
-  //   },
-  //   {
-  //     _id: "srv005",
-  //     name: "Wax & Shine",
-  //     description: "Protective wax coating with polish for long-lasting shine.",
-  //     price: 1000,
-  //     duration: 40,
-  //     image: carImag,
-  //   },
-  //   {
-  //     _id: "srv006",
-  //     name: "Premium Detailing Package",
-  //     description:
-  //       "Complete detailing package including wash, polish, and interior clean.",
-  //     price: 2500,
-  //     duration: 90,
-  //     image: carImag,
-  //   },
-  // ];
   return (
     <>
       <section className="bg-brand-primary">
@@ -91,7 +38,7 @@ const FeaturedServices = () => {
               ? serviceData.slice(0, 6)
               : serviceData
             ).map((service: TService) => (
-              <ServiceCard key={service._id} service={service} />
+              <ServiceCard key={service?._id} service={service} />
             ))}
           </motion.div>
           <motion.div

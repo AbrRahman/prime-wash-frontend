@@ -1,10 +1,18 @@
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
+import {
+  setDuration,
+  setMaxPrice,
+  setSearchTerm,
+} from "../../redux/features/service/serviceSlice";
 
 const ServiceSideBar = () => {
   const [check, setCheck] = useState(0);
   // duration value set global state
-  const [duration, setDuration] = useState(0);
-  const [priceRange, setPriceRange] = useState(5000);
+
+  const dispatch = useAppDispatch();
+  const { maxPrice } = useAppSelector((state) => state?.service);
+  // const [priceRange, setPriceRange] = useState(15000);
   const durationVal = [
     { duration: 15 },
     { duration: 30 },
@@ -13,8 +21,12 @@ const ServiceSideBar = () => {
   ];
   const handleClearFilter = () => {
     setCheck(0);
+    dispatch(setSearchTerm(""));
+    dispatch(setMaxPrice(""));
+    dispatch(setDuration(""));
   };
-  console.log(duration);
+  console.log(maxPrice);
+  // console.log(duration);
   return (
     <>
       <div className="rounded-lg text-white bg-brand-secondary px-6 py-8 sticky top-24 space-y-3">
@@ -22,16 +34,20 @@ const ServiceSideBar = () => {
           <h3 className="text-xl text-sky-50 font-semibold mb-3">Filter</h3>
           <input
             type="range"
-            onChange={(e) => setPriceRange(Number(e?.target?.value))}
+            onMouseUp={(e) =>
+              dispatch(
+                setMaxPrice(Number((e.target as HTMLInputElement).value))
+              )
+            }
             min={0}
-            defaultValue={1200}
-            max={5000}
+            defaultValue={10000}
+            max={15000}
             className="range text-black/30 [--range-bg:#001c44] [--range-thumb:#00B8DB] [--range-fill:0] w-full"
           />
           <div className="flex justify-between items-center">
             <p className="text-xl font-semibold text-slate-300">0৳</p>
             <p className="text-xl font-semibold text-slate-300">
-              {priceRange}৳
+              {maxPrice != "0" && maxPrice == "" ? "150000" : maxPrice}৳
             </p>
           </div>
         </div>
@@ -50,7 +66,7 @@ const ServiceSideBar = () => {
                   checked={index + 1 === check}
                   onChange={() => {
                     setCheck(index + 1);
-                    setDuration(item?.duration);
+                    dispatch(setDuration(item?.duration));
                   }}
                   id={`${index + 1}`}
                   className="checkbox border-cyan-500 bg-brand-primary  checked:checked:bg-cyan-500 checked:bg-brand-primary"
@@ -64,7 +80,7 @@ const ServiceSideBar = () => {
         </div>
         <button
           onClick={handleClearFilter}
-          className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide select-none"
+          className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide select-none cursor-pointer"
         >
           Clear Filter
         </button>
