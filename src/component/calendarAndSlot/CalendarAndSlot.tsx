@@ -3,7 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./CalenderAndSlot.css";
 import {
   setBookingDate,
-  setSlotId,
+  setSlot,
 } from "../../redux/features/booking/bookingSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
 import { useGetAllSlotQuery } from "../../redux/features/booking/bookingApi";
@@ -12,15 +12,18 @@ import convertToTwelveHourFormat from "../../utils/convertToTwelveHourFormat";
 
 const CalendarAndSlot = () => {
   const dispatch = useAppDispatch();
-  const { serviceId, bookingDate, slotId } = useAppSelector(
+
+  // get booking state value
+  const { service, bookingDate, slot } = useAppSelector(
     (state) => state?.booking
   );
+
   // const slot = { startTime: "12:00", endTime: "13:00", isBooked: true };
   const { data: slotData } = useGetAllSlotQuery([
-    { name: "serviceId", value: serviceId },
+    { name: "serviceId", value: service?._id ? service?._id : "" },
     { name: "date", value: bookingDate },
   ]);
-  console.log(slotData);
+
   return (
     <div className="mt-5">
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
@@ -30,7 +33,7 @@ const CalendarAndSlot = () => {
             inline
             minDate={new Date()}
             onChange={(date) =>
-              dispatch(setBookingDate(date?.toISOString().slice(0, 10)))
+              dispatch(setBookingDate(date?.toISOString()?.slice(0, 10)))
             }
           />
         </div>
@@ -39,21 +42,26 @@ const CalendarAndSlot = () => {
             Available Slot
           </h3>
           <div className="flex gap-2 flex-wrap mt-2.5">
-            {(serviceId ? slotData : slotData?.slice(0, 8))?.map(
-              (slot: TSlot) => (
+            {(service?._id ? slotData : slotData?.slice(0, 8))?.map(
+              (slotItem: TSlot) => (
                 <button
-                  key={slot?._id}
-                  disabled={slot?.isBooked == "booked"}
-                  onClick={() => dispatch(setSlotId(slot?._id))}
+                  key={slotItem?._id}
+                  disabled={slotItem?.isBooked == "booked"}
+                  onClick={() => dispatch(setSlot(slotItem))}
                   className={`bg-brand-secondary ${
-                    slotId == slot?._id ? "bg-cyan-600 " : ""
+                    slot?._id == slotItem?._id ? "bg-cyan-600 " : ""
                   }    ${
-                    slot?.isBooked === "booked"
+                    slotItem?.isBooked === "booked"
                       ? "text-slate-400 disabled:cursor-not-allowed"
                       : "cursor-pointer hover:bg-cyan-600"
                   } text-sm p-2  text-slate-50 rounded-lg border-1 border-cyan-600 transition duration-300 select-none`}
                 >
-                  {convertToTwelveHourFormat(slot?.startTime, slot?.endTime)}
+                  {slotItem?.startTime &&
+                    slotItem?.endTime &&
+                    convertToTwelveHourFormat(
+                      slotItem?.startTime,
+                      slotItem?.endTime
+                    )}
                 </button>
               )
             )}

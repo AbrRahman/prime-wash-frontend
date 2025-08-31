@@ -3,13 +3,13 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import type { TService } from "../../types/service.type";
 import { useAppDispatch } from "../../redux/features/hooks";
-import { setServiceId } from "../../redux/features/booking/bookingSlice";
+import { setService } from "../../redux/features/booking/bookingSlice";
 const ServiceCard = ({ service }: { service: TService }) => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-  const handleServiceCardBookingBtn = (id: string) => {
-    dispatch(setServiceId(id));
+  const handleServiceCardBookingBtn = (data: TService) => {
+    dispatch(setService(data));
     navigate("/booking?from=card");
   };
   return (
@@ -50,7 +50,7 @@ const ServiceCard = ({ service }: { service: TService }) => {
               Details
             </Link>
             <button
-              onClick={() => handleServiceCardBookingBtn(service?._id)}
+              onClick={() => handleServiceCardBookingBtn(service)}
               className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer"
             >
               Booking Now

@@ -24,16 +24,38 @@ const bookingApi = baseApi.injectEndpoints({
         return data?.data;
       },
     }),
-    getSingleSlot: builder.query({
-      query: (id) => ({
-        url: `/slot/${id}`,
-        method: "GET",
+
+    // cll payment url generate api call
+
+    generatePaymentUrl: builder.mutation({
+      query: (payload) => ({
+        url: "/payment",
+        method: "POST",
+        body: payload,
       }),
       transformResponse: (data) => {
         return data?.data;
       },
     }),
+    saveBookingInformation: builder.mutation({
+      query: (payload) => ({
+        url: "/booking",
+        method: "POST",
+        body: payload,
+      }),
+    }),
+    deleteUnpaidBooking: builder.query({
+      query: () => ({
+        url: "/payment/fail?from=client",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetAllSlotQuery, useGetSingleSlotQuery } = bookingApi;
+export const {
+  useGetAllSlotQuery,
+  useGeneratePaymentUrlMutation,
+  useSaveBookingInformationMutation,
+  useDeleteUnpaidBookingQuery,
+} = bookingApi;

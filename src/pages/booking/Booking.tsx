@@ -16,7 +16,6 @@ const Booking = () => {
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div>
-              {/* <BookingServiceSelection /> */}
               {queryParams == "service-details" || queryParams == "card" ? (
                 <BookingService />
               ) : (

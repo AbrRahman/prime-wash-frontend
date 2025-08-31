@@ -2,15 +2,14 @@ import { SiTicktick } from "react-icons/si";
 import { FaCalendarAlt, FaRegClock } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../redux/features/hooks";
-import { useGetSingleServiceQuery } from "../../redux/features/service/serviceApi";
-import { useGetSingleSlotQuery } from "../../redux/features/booking/bookingApi";
+
 import convertToTwelveHourFormat from "../../utils/convertToTwelveHourFormat";
 const BookingService = () => {
-  const { serviceId, bookingDate, slotId } = useAppSelector(
-    (state) => state.booking
-  );
-  const { data: serviceData } = useGetSingleServiceQuery(serviceId);
-  const { data: slotData } = useGetSingleSlotQuery(slotId);
+  const {
+    service: serviceData,
+    bookingDate,
+    slot: slotData,
+  } = useAppSelector((state) => state.booking);
 
   const [searchParams] = useSearchParams();
   const queryParams = searchParams.get("from");
@@ -57,7 +56,8 @@ const BookingService = () => {
             <div className="flex items-center gap-3 font-semibold bg-brand-secondary p-4 rounded-xl shadow">
               <FaRegClock className="text-base text-cyan-500" />
               <p className="text-sky-50">
-                {slotData &&
+                {slotData?.startTime &&
+                  slotData?.endTime &&
                   convertToTwelveHourFormat(
                     slotData?.startTime,
                     slotData?.endTime

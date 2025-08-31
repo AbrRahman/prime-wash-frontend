@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { TService } from "../../../types/service.type";
+import type { TSlot } from "../../../types/slot.type";
 
 type TBookingInitialState = {
-  serviceId: string;
-  slotId: string;
+  service: Partial<TService>;
+  slot: Partial<TSlot>;
   bookingDate: string;
 };
 
 const initialState: TBookingInitialState = {
-  serviceId: "",
-  slotId: "",
+  service: {},
+  slot: {},
   bookingDate: new Date().toISOString().slice(0, 10),
 };
 
@@ -16,11 +18,11 @@ const bookingSlice = createSlice({
   name: "booking",
   initialState,
   reducers: {
-    setServiceId: (state, actions) => {
-      state.serviceId = actions?.payload;
+    setService: (state, actions) => {
+      state.service = actions?.payload;
     },
-    setSlotId: (state, actions) => {
-      state.slotId = actions?.payload;
+    setSlot: (state, actions) => {
+      state.slot = actions?.payload;
     },
     setBookingDate: (state, actions) => {
       state.bookingDate = actions.payload;
@@ -28,6 +30,6 @@ const bookingSlice = createSlice({
   },
 });
 
-export const { setServiceId, setSlotId, setBookingDate } = bookingSlice.actions;
+export const { setService, setSlot, setBookingDate } = bookingSlice.actions;
 
 export default bookingSlice.reducer;

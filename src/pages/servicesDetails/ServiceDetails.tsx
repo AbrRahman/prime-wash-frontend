@@ -3,25 +3,27 @@ import CalendarAndSlot from "../../component/calendarAndSlot/CalendarAndSlot";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSingleServiceQuery } from "../../redux/features/service/serviceApi";
 import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
-import { setServiceId } from "../../redux/features/booking/bookingSlice";
+import { setService } from "../../redux/features/booking/bookingSlice";
 import { useState } from "react";
 const ServiceDetails = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useAppDispatch();
-  const { serviceId, slotId, bookingDate } = useAppSelector(
+  const { service, slot, bookingDate } = useAppSelector(
     (state) => state.booking
   );
 
   // catch service id throw url
   const { id } = useParams();
   const { data: serviceItem } = useGetSingleServiceQuery(id);
-  dispatch(setServiceId(serviceItem?._id));
+  dispatch(setService(serviceItem));
+
+  // initial slot state make empty
 
   const navigate = useNavigate();
 
   // handle Proceed to Pay btn
   const handleProceedToPay = () => {
-    if (serviceId && slotId && bookingDate) {
+    if (service?._id && slot?._id && bookingDate) {
       navigate(`/booking?from=service-details`);
     } else {
       setErrorMessage("Select time and slot");
