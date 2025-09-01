@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const user = true;
+  const user = false;
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -79,8 +79,30 @@ const Header = () => {
               </ul>
             </div>
             {/* user profile */}
-            {user && (
-              <div className="navbar-end">
+
+            <div className="navbar-end">
+              {/* login register button */}
+              {!user && (
+                <ul className="menu menu-horizontal px-1">
+                  <li>
+                    <Link
+                      to="/login"
+                      className="text-sky-50 bg-cyan-600 hover:bg-cyan-500 tracking-wide font-semibold transition duration-300 mr-3.5"
+                    >
+                      Login
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/register"
+                      className="text-sky-50 bg-cyan-600 hover:bg-cyan-500 tracking-wide font-semibold transition duration-300"
+                    >
+                      Register
+                    </Link>
+                  </li>
+                </ul>
+              )}
+              {user && (
                 <div className="dropdown dropdown-end">
                   <div
                     tabIndex={0}
@@ -125,8 +147,8 @@ const Header = () => {
                     </li>
                   </ul>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -10,6 +10,8 @@ import ProfileDetails from "../pages/profile/ProfileDetails";
 import MyBookings from "../pages/myBookings/MyBookings";
 import UpcomingBooking from "../pages/upcomingBooking/UpcomingBooking";
 import AdminDashboardLayout from "../layouts/AdminDashboardLayout";
+import Register from "../pages/register/Register";
+import Login from "../pages/login/Login";
 
 const appRouter = createBrowserRouter([
   {
@@ -20,6 +22,8 @@ const appRouter = createBrowserRouter([
       { path: "/services", element: <Services /> },
       { path: "/services/:id", element: <ServiceDetails /> },
       { path: "/booking", element: <Booking /> },
+      { path: "/register", element: <Register /> },
+      { path: "/login", element: <Login /> },
       {
         path: "/dashboard",
         element: <UserLayout />,

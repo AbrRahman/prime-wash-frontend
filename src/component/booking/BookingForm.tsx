@@ -1,6 +1,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  useDeleteUnpaidBookingMutation,
   useGeneratePaymentUrlMutation,
   useSaveBookingInformationMutation,
 } from "../../redux/features/booking/bookingApi";
@@ -10,6 +11,7 @@ import convertToTwelveHourFormat from "../../utils/convertToTwelveHourFormat";
 import { useNavigate } from "react-router-dom";
 import bookingFromValidation from "../../schema/bookingFromValidation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const BookingForm = () => {
   const [message, setMessage] = useState("");
@@ -18,10 +20,10 @@ const BookingForm = () => {
   // redux rtk api hook
   const [generatePaymentUrl, { isLoading: paymentLoading }] =
     useGeneratePaymentUrlMutation();
-  const [
-    saveBookingInfo,
-    { isLoading: dataSaveLoading, isError, error: saveError },
-  ] = useSaveBookingInformationMutation();
+  const [saveBookingInfo, { isLoading: dataSaveLoading, isError }] =
+    useSaveBookingInformationMutation();
+
+  const [deleteUnpaidBooking] = useDeleteUnpaidBookingMutation();
 
   // get redux state data
   const { service, slot, bookingDate } = useAppSelector(
@@ -40,6 +42,7 @@ const BookingForm = () => {
   // handle submit booking from
   const handleBooking: SubmitHandler<TBooking> = async (bookingInfo) => {
     // check user is login or not
+    toast.error("Payment Failed");
     if (!user) {
       navigate("/");
       return;
@@ -48,7 +51,6 @@ const BookingForm = () => {
     // check booking information
     if (!service._id || !slot?._id || !bookingDate) {
       setMessage("Select service, date, and slot");
-      console.log("Hi");
       return;
     }
 
@@ -63,14 +65,12 @@ const BookingForm = () => {
     //  save booking info
     const { data: bookingRes } = await saveBookingInfo(bookingData);
     if (isError) {
-      console.log(saveError);
-      alert("Booking Fail");
+      toast.error("Payment failed");
       return;
     }
-    console.log(bookingData);
+
     // get payment url api call
     if (bookingRes?.success) {
-      console.log("hi");
       const { data } = await generatePaymentUrl({
         name: "customer",
         email: "test@gmail.com",
@@ -80,7 +80,8 @@ const BookingForm = () => {
       const paymentUrl = data?.payment_url as string;
 
       if (!paymentUrl) {
-        alert("payment fail");
+        toast.success("Payment failed");
+        await deleteUnpaidBooking(undefined);
         return;
       }
       window.location.href = paymentUrl;
@@ -186,7 +187,7 @@ const BookingForm = () => {
             <div>
               <p className=" text-sm text-red-500 pb-3">{message}</p>
               <button
-                // onClick={handelPay}
+                disabled={paymentLoading && dataSaveLoading}
                 className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer"
               >
                 {(paymentLoading || dataSaveLoading) && (

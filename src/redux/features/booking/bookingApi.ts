@@ -44,10 +44,10 @@ const bookingApi = baseApi.injectEndpoints({
         body: payload,
       }),
     }),
-    deleteUnpaidBooking: builder.query({
+    deleteUnpaidBooking: builder.mutation({
       query: () => ({
-        url: "/payment/fail?from=client",
-        method: "GET",
+        url: "/booking/unpaid",
+        method: "DELETE",
       }),
     }),
   }),
@@ -57,5 +57,5 @@ export const {
   useGetAllSlotQuery,
   useGeneratePaymentUrlMutation,
   useSaveBookingInformationMutation,
-  useDeleteUnpaidBookingQuery,
+  useDeleteUnpaidBookingMutation,
 } = bookingApi;
