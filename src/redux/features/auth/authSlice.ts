@@ -18,10 +18,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, actions) => {
-      const { user, token, uiu } = actions.payload;
+      const { user, token, uid } = actions.payload;
       state.user = user;
       state.token = token;
-      state.googleUiu = uiu;
+      state.googleUiu = uid;
     },
     logOut: (state) => {
       state.user = null;

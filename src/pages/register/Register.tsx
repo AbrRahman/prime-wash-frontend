@@ -1,7 +1,116 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import type { TRegisterInput } from "../../types/register.type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerFormValidation } from "../../schema/registerFormValidation";
+import {
+  useCreateUserMutation,
+  useGoogleLoginMutation,
+} from "../../redux/features/auth/authApi";
+import { toast } from "sonner";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import type { TErrorResponse } from "../../types/error.type";
+import { useState } from "react";
+import { loginWithGoogle } from "../../redux/features/auth/firebase/authService";
+import { verifyToken } from "../../utils/verifyToken";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/features/auth/authSlice";
 
 const Register = () => {
+  const [registerUser, { isLoading }] = useCreateUserMutation();
+  const [googleLogin] = useGoogleLoginMutation();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [duplicateEmailError, setDuplicateEmailError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<TRegisterInput>({
+    resolver: zodResolver(registerFormValidation),
+  });
+  const watchImage = watch("image");
+
+  // handle register
+  const handleUserRegister: SubmitHandler<Partial<TRegisterInput>> = async (
+    data
+  ) => {
+    // generate form data
+    const formData = new FormData();
+    formData.append("name", data?.name as string);
+    formData.append("email", data?.email as string);
+    formData.append("phone", data?.phone as string);
+    formData.append("password", data?.password as string);
+    formData.append("address", data?.address as string);
+
+    // if image user not upload set default image
+    if (!watchImage?.length) {
+      formData.append(
+        "image",
+        "https://res.cloudinary.com/dmhfrwdq3/image/upload/v1756731311/file.png"
+      );
+    }
+    //  if user upload image file set image file from data
+    Array.from(data.image ?? []).forEach((file) => {
+      formData.append("file", file);
+    });
+
+    const result = await registerUser(formData);
+    // console.log(result);
+    if (result?.data?.success) {
+      toast.success("Register successfully");
+      reset();
+      navigate("/login");
+    }
+    console.log(result);
+
+    // handle backend error
+    if ("error" in result) {
+      const err = result?.error as FetchBaseQueryError & {
+        data: TErrorResponse;
+      };
+      if (err?.data?.error?.code == 11000) {
+        setDuplicateEmailError(err.data.errorSource?.[0]?.message);
+      }
+      //  err.data.errorSource?.[0]?.message
+    }
+    toast.error("Register failed");
+  };
+
+  // handle google login
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await loginWithGoogle();
+
+      const { photoURL, displayName, email, uid } = result;
+
+      if (photoURL && displayName && email) {
+        const { data } = await googleLogin({
+          name: displayName,
+          email: email,
+          image: photoURL,
+        }).unwrap();
+        console.log(data);
+        const user = await verifyToken(data?.accessToken);
+        console.log(user);
+        dispatch(setUser({ user, token: data?.accessToken, uid }));
+        toast.success("Login ");
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, { replace: true });
+      }
+    } catch (err) {
+      toast.error("Login failed");
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <div className="bg-brand-primary">
@@ -10,73 +119,86 @@ const Register = () => {
             <h1 className=" text-sky-50 text-2xl md:text-3xl  font-bold mb-8 ">
               Register
             </h1>
-            <form action="" className="space-y-4 lg:space-y-6">
+            <form
+              onSubmit={handleSubmit(handleUserRegister)}
+              className="space-y-4 lg:space-y-6"
+            >
               {/* text input */}
               <div className="space-y-4">
                 <div>
                   <input
-                    name=""
                     type="text"
+                    {...register("name")}
                     placeholder="Full name *"
                     className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                   ></input>
-                  <p className="text-red-500 text-sm ml-1 hidden">
-                    filed error{" "}
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.name?.message}
                   </p>
                 </div>
                 <div>
                   <input
-                    name=""
+                    {...register("email")}
                     type="email"
                     placeholder="Email *"
                     className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                   ></input>
-                  <p className="text-red-500 text-sm ml-1 hidden">
-                    filed error{" "}
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.email?.message
+                      ? errors?.email?.message
+                      : duplicateEmailError}
                   </p>
                 </div>
                 <div>
                   <input
+                    {...register("phone")}
                     type="text"
                     placeholder="Phone *"
                     className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                   ></input>
-                  <p className="text-red-500 text-sm ml-1 hidden">
-                    filed error{" "}
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.phone?.message}
                   </p>
                 </div>
                 <div>
                   <input
-                    name=""
                     type="text"
+                    {...register("address")}
                     placeholder="Address "
                     className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                   ></input>
-                  <p className="text-red-500 text-sm ml-1 hidden">
-                    filed error{" "}
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.address?.message}
                   </p>
                 </div>
                 <div>
                   <input
                     type="password"
+                    {...register("password")}
                     placeholder="Password *"
                     className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                   ></input>
-                  <p className="text-red-500 text-sm ml-1 hidden">
-                    filed error{" "}
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.password?.message}
                   </p>
                 </div>
-
                 <div className="pt-2">
                   <label
                     htmlFor="fileUpload"
                     className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-slate-400 px-2.5 py-2 cursor-pointer"
                   >
-                    Upload Profile Photo
+                    {watchImage?.length
+                      ? watchImage[0]?.name
+                      : "Upload Profile Photo"}
                   </label>
-                  <input type="file" className="hidden" id="fileUpload"></input>
-                  <p className="text-red-500 text-sm ml-1 hidden">
-                    filed error{" "}
+                  <input
+                    {...register("image")}
+                    type="file"
+                    className="hidden"
+                    id="fileUpload"
+                  ></input>
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.image?.message}
                   </p>
                 </div>
               </div>
@@ -88,12 +210,22 @@ const Register = () => {
                     Login
                   </Link>
                 </p>
-                <button className="text-sky-50 bg-cyan-600 px-6 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer select-none">
-                  Register
+                <button
+                  disabled={isLoading}
+                  className="text-sky-50 bg-cyan-600 px-6 py-1.5  rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer select-none"
+                >
+                  {isLoading ? (
+                    <span className="loading loading-spinner text-sky-50 loading-sm mx-6"></span>
+                  ) : (
+                    <span> Register</span>
+                  )}
                 </button>
               </div>
             </form>
-            <button className="flex items-center justify-center gap-2 text-sky-50 mt-3 w-full bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer">
+            <button
+              onClick={handleGoogleLogin}
+              className="flex items-center justify-center gap-2 text-sky-50 mt-3 w-full bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer"
+            >
               <FcGoogle className="w-5 h-5" />
               <span>Start with Google</span>
             </button>
