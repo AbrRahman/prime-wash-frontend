@@ -96,7 +96,7 @@ const Register = () => {
           name: displayName,
           email: email,
           image: photoURL,
-        }).unwrap();
+        });
         console.log(data);
         const user = await verifyToken(data?.accessToken);
         console.log(user);

@@ -9,9 +9,9 @@ const authApi = baseApi.injectEndpoints({
         body: payload,
       }),
     }),
-    googleLogin: builder.mutation({
+    login: builder.mutation({
       query: (payload) => ({
-        url: "auth/google-login",
+        url: "auth/login",
         method: "POST",
         body: payload,
       }),
@@ -19,7 +19,22 @@ const authApi = baseApi.injectEndpoints({
         return data?.data;
       },
     }),
+    // for google authentication data post
+    googleLogin: builder.mutation({
+      query: (payload) => ({
+        url: "auth/google-login",
+        method: "POST",
+        body: payload,
+      }),
+      transformResponse: (data) => {
+        return data;
+      },
+    }),
   }),
 });
 
-export const { useCreateUserMutation, useGoogleLoginMutation } = authApi;
+export const {
+  useCreateUserMutation,
+  useGoogleLoginMutation,
+  useLoginMutation,
+} = authApi;
