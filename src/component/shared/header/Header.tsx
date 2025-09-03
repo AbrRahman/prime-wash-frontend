@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../redux/features/hooks";
+import { logOut } from "../../../redux/features/auth/authSlice";
 
 const Header = () => {
-  const user = false;
+  // const user = false;
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  console.log(user, "header");
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -141,9 +146,13 @@ const Header = () => {
                         Upcoming Booking
                       </Link>
                     </li>
-
-                    <li>
-                      <a>Logout</a>
+                    <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
+                      <button
+                        onClick={() => dispatch(logOut())}
+                        className="justify-between"
+                      >
+                        Logout
+                      </button>
                     </li>
                   </ul>
                 </div>
