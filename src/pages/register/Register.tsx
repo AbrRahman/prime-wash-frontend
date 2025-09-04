@@ -97,9 +97,9 @@ const Register = () => {
           email: email,
           image: photoURL,
         });
-        console.log(data);
+
         const user = await verifyToken(data?.data?.accessToken);
-        console.log(user);
+
         dispatch(setUser({ user, token: data?.data?.accessToken, uid }));
         toast.success("Login ");
         const from = location.state?.from?.pathname || "/";

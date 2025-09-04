@@ -7,7 +7,6 @@ type TRatingProps = {
 import type { TReview } from "../../types/review.types";
 
 const ReviewCart = ({ review }: { review: TReview }) => {
-  console.log(review?.user?.image);
   // calculate rating
   const Rating = ({ value, outOf = 5 }: TRatingProps) => {
     const star = [];

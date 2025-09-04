@@ -1,12 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/features/hooks";
 import { logOut } from "../../../redux/features/auth/authSlice";
+import { googleLogOut } from "../../../redux/features/auth/firebase/authService";
 
 const Header = () => {
   // const user = false;
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, googleUiu } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  console.log(user, "header");
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    if (googleUiu) {
+      await googleLogOut();
+    }
+    dispatch(logOut());
+    navigate("/");
+  };
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -148,7 +157,7 @@ const Header = () => {
                     </li>
                     <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
                       <button
-                        onClick={() => dispatch(logOut())}
+                        onClick={handleLogout}
                         className="justify-between"
                       >
                         Logout

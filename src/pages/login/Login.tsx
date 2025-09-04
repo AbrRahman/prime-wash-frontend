@@ -23,7 +23,7 @@ type TLoginInput = {
 const Login = () => {
   const [unauthorizeErr, setUnAuthorizeErr] = useState("");
   const [googleLogin] = useGoogleLoginMutation();
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -41,13 +41,13 @@ const Login = () => {
   const handleLogin: SubmitHandler<TLoginInput> = async (payload) => {
     try {
       const result = await login(payload);
-      console.log(result);
+
       // handle invalid email or password case
       if ("error" in result) {
         const err = result?.error as FetchBaseQueryError & {
           status: number;
         };
-        console.log(err);
+
         if (err?.status == 401) {
           toast.error("Login failed");
           setUnAuthorizeErr("Invalid email or password");
@@ -150,7 +150,11 @@ const Login = () => {
                   type="submit"
                   className="text-sky-50 bg-cyan-600 px-6 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer select-none"
                 >
-                  Login
+                  {isLoading ? (
+                    <span className="loading loading-spinner text-sky-50 loading-sm mx-3.5"></span>
+                  ) : (
+                    <span> Login</span>
+                  )}
                 </button>
               </div>
             </form>
