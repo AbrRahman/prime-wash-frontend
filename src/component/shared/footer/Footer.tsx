@@ -1,13 +1,64 @@
 import { motion } from "framer-motion";
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
+import emailjs, { EmailJSResponseStatus } from "@emailjs/browser";
 import {
   FaFacebookF,
   FaTwitter,
   FaInstagram,
   FaLinkedinIn,
 } from "react-icons/fa";
+
+type TEmailInputs = {
+  name: string;
+  email: string;
+  message: string;
+};
+
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { footerFromValidation } from "../../../schema/footerFromValidation";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 const Footer = () => {
+  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<TEmailInputs>({
+    resolver: zodResolver(footerFromValidation),
+  });
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleEmailSend = async () => {
+    try {
+      if (!formRef.current) return;
+      setLoading(true);
+      const result: EmailJSResponseStatus = await emailjs.sendForm(
+        "service_8h404yj",
+        "template_gjnls42",
+        formRef.current,
+        {
+          publicKey: "f-TI9rVtSKjwZm0Ds",
+        }
+      );
+      if (result.status === 200) {
+        toast.success("Message sent successfully!");
+        setLoading(false);
+        reset();
+      } else {
+        setLoading(false);
+      }
+    } catch (err) {
+      toast.error("Failed to send. Please try again");
+      setLoading(false);
+      console.log(err);
+    }
+  };
+
   const socials = [
     { icon: <FaFacebookF />, url: "https://facebook.com/primewash" },
     { icon: <FaTwitter />, url: "https://twitter.com/primewash" },
@@ -17,6 +68,7 @@ const Footer = () => {
       url: "https://linkedin.com/company/primewash",
     },
   ];
+
   return (
     <>
       <section className="bg-brand-secondary">
@@ -118,6 +170,8 @@ const Footer = () => {
                 </motion.div>
               </div>
             </div>
+
+            {/* contract from */}
             <div className=" col-span-6">
               <motion.div
                 className="bg-brand-primary py-6 px-4 lg:px-6 lg:py-7 rounded-lg shadow-lg"
@@ -127,45 +181,56 @@ const Footer = () => {
                 viewport={{ once: true, amount: 0.2 }}
               >
                 <div className="py-6 px-4 lg:px-6 lg:py-7 ">
-                  <form action="" className="space-y-4 lg:space-y-6">
+                  <form
+                    ref={formRef}
+                    onSubmit={handleSubmit(handleEmailSend)}
+                    className="space-y-4 lg:space-y-6"
+                  >
                     {/* text input */}
                     <div className="space-y-4">
                       <div>
                         <input
-                          name=""
+                          {...register("name")}
                           type="text"
                           placeholder="Name"
                           className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                         ></input>
-                        <p className="text-red-500 text-sm ml-1 hidden">
-                          filed error{" "}
+                        <p className="text-red-500 text-sm ml-1">
+                          {errors?.name?.message}
                         </p>
                       </div>
                       <div>
                         <input
-                          name=""
+                          {...register("email")}
                           type="email"
                           placeholder="Email"
                           className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                         ></input>
-                        <p className="text-red-500 text-sm ml-1 hidden">
-                          filed error{" "}
+                        <p className="text-red-500 text-sm ml-1">
+                          {errors?.email?.message}
                         </p>
                       </div>
                       <div>
                         <textarea
-                          name=""
-                          id=""
+                          {...register("message")}
                           placeholder="Message..."
                           className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg h-28 lg:h-32 focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
                         ></textarea>
-                        <p className="text-red-500 text-sm ml-1 hidden">
-                          filed error{" "}
+                        <p className="text-red-500 text-sm ml-1">
+                          {errors?.message?.message}
                         </p>
                       </div>
                     </div>
-                    <button className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer">
-                      Submit
+                    <button
+                      disabled={loading}
+                      type="submit"
+                      className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer"
+                    >
+                      {loading ? (
+                        <span className="loading loading-spinner text-sky-50 loading-sm mx-5"></span>
+                      ) : (
+                        <span>Submit</span>
+                      )}
                     </button>
                   </form>
                 </div>
