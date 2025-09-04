@@ -12,6 +12,7 @@ import UpcomingBooking from "../pages/upcomingBooking/UpcomingBooking";
 import AdminDashboardLayout from "../layouts/AdminDashboardLayout";
 import Register from "../pages/register/Register";
 import Login from "../pages/login/Login";
+import Review from "../pages/review/Review";
 
 const appRouter = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const appRouter = createBrowserRouter([
       { path: "/booking", element: <Booking /> },
       { path: "/register", element: <Register /> },
       { path: "/login", element: <Login /> },
+      { path: "/reviews", element: <Review /> },
       {
         path: "/dashboard",
         element: <UserLayout />,

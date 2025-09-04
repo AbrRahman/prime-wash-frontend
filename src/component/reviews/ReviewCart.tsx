@@ -4,9 +4,11 @@ type TRatingProps = {
   value: number;
   outOf?: number;
 };
-import userImag from "../../assets/images/member1.png";
+import type { TReview } from "../../types/review.types";
 
-const ReviewCart = () => {
+const ReviewCart = ({ review }: { review: TReview }) => {
+  console.log(review?.user?.image);
+  // calculate rating
   const Rating = ({ value, outOf = 5 }: TRatingProps) => {
     const star = [];
     for (let i = 1; i <= outOf; i++) {
@@ -22,6 +24,7 @@ const ReviewCart = () => {
     }
     return <div className="flex space-x-1">{star}</div>;
   };
+
   return (
     <>
       <motion.div
@@ -32,18 +35,20 @@ const ReviewCart = () => {
         }}
         transition={{ duration: 0.8 }}
       >
-        <Rating value={2.5} />
+        <Rating value={Number(review?.rating)} />
         <p className="text-slate-400 text-lg font-semibold  tracking-wide">
-          Good overall wash. Took a bit longer than expected but the results
-          were satisfying
+          {review?.comment}
         </p>
         <div className="flex gap-3">
           <img
-            src={userImag}
+            src={review?.user?.image}
+            referrerPolicy="no-referrer"
             alt="user image"
             className="w-10 h-10 rounded-full"
           />
-          <h1 className="text-sky-50 text-base font-bold mt-1">Sophia M.</h1>
+          <h1 className="text-sky-50 text-base font-bold mt-1">
+            {review?.user?.name}
+          </h1>
         </div>
       </motion.div>
     </>

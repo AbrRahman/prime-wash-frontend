@@ -4,12 +4,14 @@ import type { TUser } from "../../../types/auth.type";
 type TAuthInitialState = {
   user: TUser | null;
   token: string | null;
+  image: string | null;
   googleUiu: string | null;
 };
 
 const initialState: TAuthInitialState = {
   user: null,
   token: null,
+  image: null,
   googleUiu: null,
 };
 

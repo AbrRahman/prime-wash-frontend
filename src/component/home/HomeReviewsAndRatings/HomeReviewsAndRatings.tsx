@@ -2,7 +2,11 @@ import { motion } from "framer-motion";
 import ReviewCart from "../../reviews/ReviewCart";
 import { Link } from "react-router-dom";
 import ReviewsForm from "./ReviewsForm";
+import { useGetAllReviewQuery } from "../../../redux/features/review/reviewApi";
+import type { TReview } from "../../../types/review.types";
 const HomeReviewsAndRatings = () => {
+  const { data: reviewData } = useGetAllReviewQuery(undefined);
+
   return (
     <>
       <section className="bg-brand-primary">
@@ -33,8 +37,12 @@ const HomeReviewsAndRatings = () => {
                   },
                 }}
               >
-                <ReviewCart />
-                <ReviewCart />
+                {(reviewData?.length > 2
+                  ? reviewData.slice(0, 2)
+                  : reviewData
+                )?.map((review: TReview) => (
+                  <ReviewCart review={review} />
+                ))}
               </motion.div>
               <motion.div
                 className="flex justify-center mt-8 lg:mt-12"
