@@ -14,6 +14,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginValidation from "../../schema/loginValidation";
 import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 type TLoginInput = {
   email: string;
@@ -22,6 +23,7 @@ type TLoginInput = {
 
 const Login = () => {
   const [unauthorizeErr, setUnAuthorizeErr] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [googleLogin] = useGoogleLoginMutation();
   const [login, { isLoading }] = useLoginMutation();
 
@@ -124,12 +126,25 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <input
-                    {...register("password")}
-                    type="password"
-                    placeholder="Password *"
-                    className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
-                  ></input>
+                  <div className="relative">
+                    <input
+                      {...register("password")}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password *"
+                      className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
+                    ></input>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-600 hover:text-cyan-500 transition cursor-pointer duration-300"
+                    >
+                      {showPassword ? (
+                        <FiEyeOff className="size-5" />
+                      ) : (
+                        <FiEye className="size-5" />
+                      )}
+                    </button>
+                  </div>
                   <p className="text-red-500 text-sm ml-1">
                     {zodError?.password?.message}
                   </p>

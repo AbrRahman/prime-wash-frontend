@@ -16,8 +16,10 @@ import { loginWithGoogle } from "../../redux/features/auth/firebase/authService"
 import { verifyToken } from "../../utils/verifyToken";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/features/auth/authSlice";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [registerUser, { isLoading }] = useCreateUserMutation();
   const [googleLogin] = useGoogleLoginMutation();
 
@@ -69,7 +71,6 @@ const Register = () => {
       reset();
       navigate("/login");
     }
-    console.log(result);
 
     // handle backend error
     if ("error" in result) {
@@ -79,9 +80,8 @@ const Register = () => {
       if (err?.data?.error?.code == 11000) {
         setDuplicateEmailError(err.data.errorSource?.[0]?.message);
       }
-      //  err.data.errorSource?.[0]?.message
+      toast.error("Register failed");
     }
-    toast.error("Register failed");
   };
 
   // handle google login
@@ -172,12 +172,25 @@ const Register = () => {
                   </p>
                 </div>
                 <div>
-                  <input
-                    type="password"
-                    {...register("password")}
-                    placeholder="Password *"
-                    className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
-                  ></input>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      {...register("password")}
+                      placeholder="Password *"
+                      className="bg-brand-secondary w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
+                    ></input>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-600 hover:text-cyan-500 transition cursor-pointer duration-300"
+                    >
+                      {showPassword ? (
+                        <FiEyeOff className="size-5" />
+                      ) : (
+                        <FiEye className="size-5" />
+                      )}
+                    </button>
+                  </div>
                   <p className="text-red-500 text-sm ml-1">
                     {errors?.password?.message}
                   </p>

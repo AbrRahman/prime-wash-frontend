@@ -16,3 +16,9 @@ export const editProfileValidation = z.object({
       }
     ),
 });
+
+export const passwordValidation = z.object({
+  password: z.string().min(6, "New password  at least 6 characters"),
+  oldPassword: z.string().min(6, "Old password  at least 6 characters"),
+  confirmPassword: z.string().min(6, "Confirm password  at least 6 characters"),
+});

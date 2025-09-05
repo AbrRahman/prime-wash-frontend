@@ -43,6 +43,13 @@ const authApi = baseApi.injectEndpoints({
         return data?.data;
       },
     }),
+    passwordChange: builder.mutation({
+      query: (payload) => ({
+        url: "auth/password-change",
+        method: "PUT",
+        body: payload,
+      }),
+    }),
 
     // update user profile
     updateProfile: builder.mutation({
@@ -62,4 +69,5 @@ export const {
   useLoginMutation,
   useGetUserProfileQuery,
   useUpdateProfileMutation,
+  usePasswordChangeMutation,
 } = authApi;

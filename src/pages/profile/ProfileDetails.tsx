@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiEye, FiEyeOff } from "react-icons/fi";
 import {
   useGetUserProfileQuery,
+  usePasswordChangeMutation,
   useUpdateProfileMutation,
 } from "../../redux/features/auth/authApi";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { useAppSelector } from "../../redux/features/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editProfileValidation } from "../../schema/editProfileValidation";
+import {
+  editProfileValidation,
+  passwordValidation,
+} from "../../schema/editProfileValidation";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { logOut } from "../../redux/features/auth/authSlice";
 
 type TProfileInput = {
   name?: string;
@@ -17,14 +23,28 @@ type TProfileInput = {
   phone?: string;
   image: FileList;
 };
+type TPasswordInput = {
+  password: string;
+  oldPassword: string;
+  confirmPassword: string;
+};
 
 const ProfileDetails = () => {
   const [editProfile, setEditProfile] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+  const [passwordConfirmErr, setPasswordConfirmErr] = useState("");
 
   const { data: profile } = useGetUserProfileQuery(undefined);
   const { googleUiu } = useAppSelector((state) => state.auth);
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+  const [updatePassword, { isLoading: passwordLoading }] =
+    usePasswordChangeMutation();
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -57,6 +77,40 @@ const ProfileDetails = () => {
       }
     } catch (err) {
       toast.error("Profile update failed");
+      console.log(err);
+    }
+  };
+
+  // password change form
+  const {
+    register: passwordRegister,
+    handleSubmit: passwordHandleSubmit,
+    reset,
+    formState: { errors: passwordZodValidationErr },
+  } = useForm<TPasswordInput>({ resolver: zodResolver(passwordValidation) });
+
+  const handelPasswordChange: SubmitHandler<TPasswordInput> = async (data) => {
+    if (data?.password !== data?.confirmPassword) {
+      setPasswordConfirmErr("Passwords do not match");
+      return;
+    }
+    try {
+      const result = await updatePassword({
+        password: data?.password,
+        oldPassword: data?.oldPassword,
+      }).unwrap();
+      if (result?.success) {
+        toast.success("Password changed successfully!");
+        reset();
+        setPasswordConfirmErr("");
+        dispatch(logOut());
+        navigate("/login");
+      } else {
+        toast.error("Something went wrong");
+      }
+      console.log(result);
+    } catch (err) {
+      toast.error("Something went wrong. Try again later.");
       console.log(err);
     }
   };
@@ -236,43 +290,111 @@ const ProfileDetails = () => {
                   Password Change
                 </h1>
               </div>
-              <form action="" className="my-5">
+              <form
+                onSubmit={passwordHandleSubmit(handelPasswordChange)}
+                className="my-5"
+              >
                 <div>
                   <div className="space-y-1">
                     <h3 className="text-base text-slate-400 font-semibold">
                       Old Password
                     </h3>
-                    <input
-                      type="password"
-                      placeholder="Enter your ond password"
-                      className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
-                    />
+                    <div className="relative">
+                      <input
+                        {...passwordRegister("oldPassword")}
+                        type={showOldPassword ? "text" : "password"}
+                        placeholder="Enter your ond password"
+                        className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
+                      />
+
+                      {/* Toggle Eye Button */}
+                      <button
+                        type="button"
+                        onClick={() => setShowOldPassword(!showOldPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-600 hover:text-cyan-500 transition cursor-pointer duration-300"
+                      >
+                        {showOldPassword ? (
+                          <FiEyeOff className="size-5" />
+                        ) : (
+                          <FiEye className="size-5" />
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-red-500 text-sm ml-1">
+                      {passwordZodValidationErr?.oldPassword?.message}
+                    </p>
                   </div>
                   <div className="py-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <h3 className="text-base text-slate-400 font-semibold">
                         New Password
                       </h3>
-                      <input
-                        type="password"
-                        placeholder="Enter new password"
-                        className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
-                      />
+                      <div className="relative">
+                        <input
+                          type={showNewPassword ? "text" : "password"}
+                          {...passwordRegister("password")}
+                          placeholder="Enter new password"
+                          className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-600 hover:text-cyan-500 transition cursor-pointer duration-300"
+                        >
+                          {showNewPassword ? (
+                            <FiEyeOff className="size-5" />
+                          ) : (
+                            <FiEye className="size-5" />
+                          )}
+                        </button>
+                      </div>
+                      <p className="text-red-500 text-sm ml-1">
+                        {passwordZodValidationErr?.password?.message}
+                      </p>
                     </div>
                     <div className="space-y-1">
                       <h3 className="text-base text-slate-400 font-semibold">
                         Confirm Password
                       </h3>
-                      <input
-                        type="password"
-                        placeholder="Confirm password"
-                        className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
-                      />
+                      <div className="relative">
+                        <input
+                          {...passwordRegister("confirmPassword")}
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirm password"
+                          className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-sky-600 hover:text-cyan-500 transition cursor-pointer duration-300"
+                        >
+                          {showConfirmPassword ? (
+                            <FiEyeOff className="size-5" />
+                          ) : (
+                            <FiEye className="size-5" />
+                          )}
+                        </button>
+                      </div>
+                      <p className="text-red-500 text-sm ml-1">
+                        {passwordZodValidationErr?.confirmPassword?.message}
+                      </p>
                     </div>
                   </div>
                 </div>
-                <button className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer">
-                  Change Password
+                <p className="text-red-500 text-sm mb-1.5">
+                  {passwordConfirmErr}
+                </p>
+                <button
+                  type="submit"
+                  className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer select-none"
+                >
+                  {passwordLoading ? (
+                    <span className="loading loading-spinner text-sky-50 loading-md mx-15.5"></span>
+                  ) : (
+                    <span>Change Password</span>
+                  )}
                 </button>
               </form>
             </div>
