@@ -1,27 +1,80 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
-import profileImage from "../../assets/images/member1.png";
+import {
+  useGetUserProfileQuery,
+  useUpdateProfileMutation,
+} from "../../redux/features/auth/authApi";
+import { MdOutlineFileUpload } from "react-icons/md";
+import { useAppSelector } from "../../redux/features/hooks";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { editProfileValidation } from "../../schema/editProfileValidation";
+import { toast } from "sonner";
+
+type TProfileInput = {
+  name?: string;
+  address?: string;
+  phone?: string;
+  image: FileList;
+};
+
 const ProfileDetails = () => {
-  const [editProfile, serEditProfile] = useState(false);
-  const [profileImg, setProfileImg] = useState(profileImage);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const handleFileFiled = () => {
-    fileRef?.current?.click();
+  const [editProfile, setEditProfile] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+
+  const { data: profile } = useGetUserProfileQuery(undefined);
+  const { googleUiu } = useAppSelector((state) => state.auth);
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<TProfileInput>({
+    resolver: zodResolver(editProfileValidation),
+  });
+  const watchImage = watch("image");
+  // handle profile edit
+  const HandleProfileEdit: SubmitHandler<Partial<TProfileInput>> = async (
+    data
+  ) => {
+    // generate profile form data
+    const formData = new FormData();
+    formData.append("name", data?.name as string);
+    formData.append("phone", data?.phone as string);
+    formData.append("address", data?.address as string);
+
+    //  if user upload image file set image file from data
+    Array.from(data.image ?? []).forEach((file) => {
+      formData.append("file", file);
+    });
+
+    try {
+      const result = await updateProfile(formData)?.unwrap();
+      if (result?.success) {
+        toast.success("Profile Updated");
+      }
+    } catch (err) {
+      toast.error("Profile update failed");
+      console.log(err);
+    }
   };
+
   useEffect(() => {
-    const file = fileRef.current;
-    console.log(file);
-    // if (file) {
-    // //   const objectUrl = URL.createObjectURL(file);
-    //   setProfileImg(objectUrl);
-    // }
-  }, [fileRef]);
+    const file = watchImage?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewImage(url);
+    }
+  }, [watchImage]);
+
   return (
     <>
       <div className="flex justify-between items-center border-b-2 border-dashed pb-6 border-b-brand-primary ">
         <h1 className="text-xl font-semibold text-sky-50">My Profile</h1>
         <FiEdit
-          onClick={() => serEditProfile(!editProfile)}
+          onClick={() => setEditProfile(!editProfile)}
           className="text-xl font-semibold text-cyan-500 hover:text-cyan-600 transition duration-300 cursor-pointer"
         />
       </div>
@@ -34,7 +87,7 @@ const ProfileDetails = () => {
                 Full Name
               </h3>
               <h4 className="text-base text-sky-50 font-semibold">
-                Emma Collins
+                {profile?.name}
               </h4>
             </div>
             <div className="space-y-1">
@@ -42,7 +95,7 @@ const ProfileDetails = () => {
                 Full Address
               </h3>
               <h4 className="text-base text-sky-50 font-semibold">
-                Mirpur-10, Dahaka, Bangladesh
+                {profile?.address ? profile?.address : "- Empty -"}
               </h4>
             </div>
           </div>
@@ -53,7 +106,7 @@ const ProfileDetails = () => {
                   Email
                 </h3>
                 <h4 className="text-base text-sky-50 font-semibold">
-                  emmacollins@gamil.com
+                  {profile?.email}
                 </h4>
               </div>
               <div className="space-y-1">
@@ -61,7 +114,7 @@ const ProfileDetails = () => {
                   Phone
                 </h3>
                 <h4 className="text-base text-sky-50 font-semibold">
-                  013425324234
+                  {profile?.phone ? profile?.phone : "- Empty -"}
                 </h4>
               </div>
             </div>
@@ -71,7 +124,7 @@ const ProfileDetails = () => {
         // profile edit part
         <div>
           {/* profile info change */}
-          <form action="">
+          <form onSubmit={handleSubmit(HandleProfileEdit)}>
             <div className="py-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
               <div className="space-y-8">
                 <div className="space-y-1">
@@ -79,20 +132,29 @@ const ProfileDetails = () => {
                     Full Name
                   </h3>
                   <input
+                    {...register("name")}
                     type="text"
-                    value="Emma Collins"
+                    defaultValue={profile?.name}
                     className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
                   />
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.name?.message}
+                  </p>
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-base text-slate-400 font-semibold">
                     Full Address
                   </h3>
                   <input
+                    {...register("address")}
                     type="text"
-                    value="Mirpur-10, Dahaka, Bangladesh"
+                    placeholder="Add your full address"
+                    defaultValue={profile?.address}
                     className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
                   />
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.address?.message}
+                  </p>
                 </div>
               </div>
               <div>
@@ -103,7 +165,8 @@ const ProfileDetails = () => {
                     </h3>
                     <input
                       type="text"
-                      value="emmacollins@gamil.com"
+                      disabled
+                      value={profile?.email}
                       className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
                     />
                   </div>
@@ -112,87 +175,108 @@ const ProfileDetails = () => {
                       Phone
                     </h3>
                     <input
+                      {...register("phone")}
                       type="text"
-                      value="013425324234"
+                      placeholder="Add your contact number"
+                      defaultValue={profile?.phone}
                       className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
                     />
+                    <p className="text-red-500 text-sm ml-1">
+                      {errors?.phone?.message}
+                    </p>
                   </div>
                 </div>
               </div>
               <div className="space-y-8">
                 <div className="space-y-1">
-                  <h3 className="text-base text-slate-400 font-semibold">
-                    Change Profile Image
-                  </h3>
-                  <div
-                    className="w-1/4 h-1/4 cursor-pointer"
-                    onClick={handleFileFiled}
-                  >
-                    <img
-                      src={profileImg}
-                      alt=""
-                      className="w-full rounded-full"
-                    />
+                  <div className="flex gap-2">
+                    <h3 className="text-base text-slate-400 font-semibold">
+                      Change Profile Image
+                    </h3>
+                    <MdOutlineFileUpload className="size-7 text-cyan-600" />
                   </div>
+                  <div className="w-1/4 h-1/4 cursor-pointer">
+                    <label htmlFor="profileImage" className="cursor-pointer">
+                      <img
+                        src={previewImage ? previewImage : profile?.image}
+                        alt="profile image"
+                        referrerPolicy="no-referrer"
+                        className="w-full rounded-full"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-red-500 text-sm ml-1">
+                    {errors?.image?.message}
+                  </p>
                   <input
-                    ref={fileRef}
+                    id="profileImage"
+                    {...register("image")}
                     type="file"
                     className="text-brand-secondary"
                   />
                 </div>
               </div>
             </div>
-            <button className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer">
-              Save Change
+            <button
+              type="submit"
+              className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer"
+            >
+              {isLoading ? (
+                <span className="loading loading-spinner text-sky-50 loading-md mx-10.5"></span>
+              ) : (
+                <span> Save Change</span>
+              )}
             </button>
           </form>
           {/* pass word change */}
-          <div>
-            <div className="border-b-2 border-dashed py-3 mt-5 border-b-brand-primary ">
-              <h1 className="text-base font-semibold text-sky-50">
-                Password Change
-              </h1>
-            </div>
-            <form action="" className="my-5">
-              <div>
-                <div className="space-y-1">
-                  <h3 className="text-base text-slate-400 font-semibold">
-                    Old Password
-                  </h3>
-                  <input
-                    type="password"
-                    placeholder="Enter your ond password"
-                    className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
-                  />
-                </div>
-                <div className="py-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <h3 className="text-base text-slate-400 font-semibold">
-                      New Password
-                    </h3>
-                    <input
-                      type="password"
-                      placeholder="Enter new password"
-                      className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-base text-slate-400 font-semibold">
-                      Confirm Password
-                    </h3>
-                    <input
-                      type="password"
-                      placeholder="Confirm password"
-                      className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
-                    />
-                  </div>
-                </div>
+          {!googleUiu && (
+            <div>
+              <div className="border-b-2 border-dashed py-3 mt-5 border-b-brand-primary ">
+                <h1 className="text-base font-semibold text-sky-50">
+                  Password Change
+                </h1>
               </div>
-              <button className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer">
-                Change Password
-              </button>
-            </form>
-          </div>
+              <form action="" className="my-5">
+                <div>
+                  <div className="space-y-1">
+                    <h3 className="text-base text-slate-400 font-semibold">
+                      Old Password
+                    </h3>
+                    <input
+                      type="password"
+                      placeholder="Enter your ond password"
+                      className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
+                    />
+                  </div>
+                  <div className="py-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <h3 className="text-base text-slate-400 font-semibold">
+                        New Password
+                      </h3>
+                      <input
+                        type="password"
+                        placeholder="Enter new password"
+                        className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-base text-slate-400 font-semibold">
+                        Confirm Password
+                      </h3>
+                      <input
+                        type="password"
+                        placeholder="Confirm password"
+                        className=" text-slate-300 bg-brand-primary  w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50  px-2.5 py-1.5"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button className="text-sky-50 bg-cyan-600 px-4 py-1.5 rounded-md hover:bg-cyan-500 transition-colors duration-300 tracking-wide cursor-pointer">
+                  Change Password
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       )}
     </>

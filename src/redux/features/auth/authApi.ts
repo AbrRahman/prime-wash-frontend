@@ -19,6 +19,7 @@ const authApi = baseApi.injectEndpoints({
         return data?.data;
       },
     }),
+
     // for google authentication data post
     googleLogin: builder.mutation({
       query: (payload) => ({
@@ -30,6 +31,28 @@ const authApi = baseApi.injectEndpoints({
         return data;
       },
     }),
+
+    // get user profile
+    getUserProfile: builder.query({
+      providesTags: ["profile"],
+      query: () => ({
+        url: "auth/profile",
+        method: "GET",
+      }),
+      transformResponse: (data) => {
+        return data?.data;
+      },
+    }),
+
+    // update user profile
+    updateProfile: builder.mutation({
+      query: (payload) => ({
+        url: "auth/profile",
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["profile"],
+    }),
   }),
 });
 
@@ -37,4 +60,6 @@ export const {
   useCreateUserMutation,
   useGoogleLoginMutation,
   useLoginMutation,
+  useGetUserProfileQuery,
+  useUpdateProfileMutation,
 } = authApi;
