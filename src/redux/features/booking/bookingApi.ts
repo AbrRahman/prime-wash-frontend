@@ -50,6 +50,26 @@ const bookingApi = baseApi.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    // get my all booking
+    getMyAllBooking: builder.query({
+      query: () => ({
+        url: "/booking/my-booking",
+        method: "GET",
+      }),
+      transformResponse: (data) => {
+        return data?.data;
+      },
+    }),
+    // get my all booking
+    getMyUpcomingBooking: builder.query({
+      query: () => ({
+        url: "/booking/my-upcoming-booking",
+        method: "GET",
+      }),
+      transformResponse: (data) => {
+        return data?.data;
+      },
+    }),
   }),
 });
 
@@ -58,4 +78,6 @@ export const {
   useGeneratePaymentUrlMutation,
   useSaveBookingInformationMutation,
   useDeleteUnpaidBookingMutation,
+  useGetMyAllBookingQuery,
+  useGetMyUpcomingBookingQuery,
 } = bookingApi;

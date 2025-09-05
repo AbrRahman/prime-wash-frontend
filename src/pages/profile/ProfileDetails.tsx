@@ -106,7 +106,7 @@ const ProfileDetails = () => {
         dispatch(logOut());
         navigate("/login");
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong. Try again later.");
       }
       console.log(result);
     } catch (err) {

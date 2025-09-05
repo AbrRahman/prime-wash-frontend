@@ -1,9 +1,20 @@
+import type { TService } from "./service.type";
+import type { TSlot } from "./slot.type";
+
 export type TBooking = {
-  // customer: string;
-  // service: string;
-  // slot: string;
   vehicleType: string;
   vehicleBrand: string;
   vehicleModel: string;
   registrationPlate: string;
+};
+
+export type TBookingData = {
+  _id: string;
+  slot: TSlot;
+  service: TService;
+  vehicleType: string;
+  vehicleBrand: string;
+  vehicleModel: string;
+  registrationPlate: string;
+  paymentStatus: "paid" | "unpaid";
 };

@@ -1,5 +1,9 @@
-import serviceImage from "../../assets/images/car-1.png";
+import { useGetMyAllBookingQuery } from "../../redux/features/booking/bookingApi";
+import type { TBookingData } from "../../types/booking.type";
+import convertToTwelveHourFormat from "../../utils/convertToTwelveHourFormat";
 const MyBookings = () => {
+  const { data: myBookingData } = useGetMyAllBookingQuery(undefined);
+
   return (
     <div>
       <div className="border-b-2 border-dashed pb-6 border-b-brand-primary ">
@@ -17,23 +21,39 @@ const MyBookings = () => {
               <th>Service Charge</th>
               <th>Car Name</th>
               <th>Car Brand</th>
+              <th>Payment Status</th>
               <th>Booking Status</th>
             </tr>
           </thead>
           <tbody>
             {/* row 1 */}
-            <tr className="text-slate-300">
-              <td>
-                <img src={serviceImage} alt="" className="w-20" />
-              </td>
-              <td>Basic Wash</td>
-              <td className="whitespace-nowrap">01-09-25</td>
-              <td className="whitespace-nowrap">09:00am-10:00am</td>
-              <td>2000 tk</td>
-              <td>Camry</td>
-              <td>Toyota</td>
-              <td>Booked</td>
-            </tr>
+            {myBookingData?.map((bookingItem: TBookingData) => (
+              <tr key={bookingItem?._id} className="text-slate-300">
+                <td>
+                  <img
+                    src={bookingItem?.service?.image}
+                    alt="service image"
+                    className="w-20"
+                  />
+                </td>
+                <td>{bookingItem?.service?.name}</td>
+                <td className="whitespace-nowrap">{bookingItem?.slot?.date}</td>
+                <td className="whitespace-nowrap">
+                  {" "}
+                  {bookingItem?.slot?.startTime &&
+                    bookingItem?.slot?.endTime &&
+                    convertToTwelveHourFormat(
+                      bookingItem?.slot?.startTime,
+                      bookingItem?.slot?.endTime
+                    )}
+                </td>
+                <td>{bookingItem?.service?.price}</td>
+                <td>{bookingItem?.vehicleType}</td>
+                <td>{bookingItem?.vehicleBrand}</td>
+                <td>{bookingItem?.paymentStatus}</td>
+                <td>Booked</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

@@ -29,6 +29,7 @@ const BookingForm = () => {
   const { service, slot, bookingDate } = useAppSelector(
     (state) => state.booking
   );
+  const { user } = useAppSelector((state) => state.auth);
 
   const {
     register,
@@ -37,14 +38,12 @@ const BookingForm = () => {
   } = useForm<TBooking>({
     resolver: zodResolver(bookingFromValidation),
   });
-  const user = true;
 
   // handle submit booking from
   const handleBooking: SubmitHandler<TBooking> = async (bookingInfo) => {
     // check user is login or not
-    toast.error("Payment Failed");
     if (!user) {
-      navigate("/");
+      navigate("/login");
       return;
     }
 
@@ -56,7 +55,7 @@ const BookingForm = () => {
 
     // booking data preparation
     const bookingData = {
-      customer: "68add97583f0a5eea00e0bcf",
+      customer: user?._id,
       service: service?._id,
       slot: slot?._id,
       ...bookingInfo,
