@@ -5,7 +5,7 @@ type TAdminSidebarProps = {
 const AdminDashboardSidebar = ({ handleSidebar }: TAdminSidebarProps) => {
   return (
     <>
-      <ul className="menu text-base-content dropdown-content  min-h-full w-64m bg-brand-primary p-4">
+      <ul className="menu text-base-content dropdown-content  min-h-full w-64 bg-brand-primary p-4">
         <div className="mt-2 flex justify-end">
           {/* slider btn */}
           <div

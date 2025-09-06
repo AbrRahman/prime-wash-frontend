@@ -13,6 +13,7 @@ import AdminDashboardLayout from "../layouts/AdminDashboardLayout";
 import Register from "../pages/register/Register";
 import Login from "../pages/login/Login";
 import Review from "../pages/review/Review";
+import ServiceManagement from "../pages/admin/serviceManagemnet/ServiceManagement";
 
 const appRouter = createBrowserRouter([
   {
@@ -53,6 +54,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/dashboard",
     element: <AdminDashboardLayout />,
+    children: [{ path: "", element: <ServiceManagement /> }],
   },
   {
     path: "*",

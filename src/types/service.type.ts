@@ -8,3 +8,11 @@ export type TService = {
   isDeleted: boolean;
   __v: number;
 };
+
+export type TServiceInput = {
+  name: string;
+  description: string;
+  duration: string;
+  price: string;
+  image: FileList;
+};

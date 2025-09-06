@@ -5,7 +5,7 @@ type TAdminHeaderProps = {
 const AdminDashboardHeader = ({ handleSidebar }: TAdminHeaderProps) => {
   return (
     <>
-      <div className=" bg-brand-primary sticky top-0">
+      <div className=" bg-brand-primary sticky top-0 z-50">
         <div className="container  mx-auto sm:py-2">
           <div className="navbar">
             <div className="navbar-start">

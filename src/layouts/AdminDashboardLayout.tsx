@@ -1,7 +1,8 @@
 import { useState } from "react";
-import AdminDashboardSidebar from "../component/shared/adminDashboardSidebar/adminDashboardSidebar";
-import AdminDashboardHeader from "../component/shared/adminDashboardHeader/adminDashboardHeader";
+
 import { Outlet } from "react-router-dom";
+import AdminDashboardHeader from "../component/shared/adminDashboardHeader/AdminDashboardHeader";
+import AdminDashboardSidebar from "../component/shared/adminDashboardSidebar/AdminDashboardSidebar";
 
 const AdminDashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,9 +19,8 @@ const AdminDashboardLayout = () => {
         <div className="drawer-content">
           {/* Page content here */}
           <AdminDashboardHeader handleSidebar={() => setIsOpen(!isOpen)} />
-          <div className="p-6 bg-brand-secondary h-screen">
+          <div className="p-6 bg-brand-secondary h-screen overflow-y-auto">
             <Outlet />
-            <h1>Here is page content</h1>
           </div>
         </div>
         <div className="drawer-side">

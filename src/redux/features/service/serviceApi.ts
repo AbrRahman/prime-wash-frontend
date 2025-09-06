@@ -33,8 +33,37 @@ const serviceApi = baseApi.injectEndpoints({
         return data?.data;
       },
     }),
+
+    // create service by admin
+    createService: builder.mutation({
+      query: (payload) => ({
+        url: "/service",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["service"],
+      transformResponse: (data) => {
+        return data;
+      },
+    }),
+
+    // delete service by admin
+    deleteService: builder.mutation({
+      query: (id) => ({
+        url: `/service/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["service"],
+      transformResponse: (data) => {
+        return data;
+      },
+    }),
   }),
-  // overrideExisting: false,
 });
 
-export const { useGetAllServiceQuery, useGetSingleServiceQuery } = serviceApi;
+export const {
+  useGetAllServiceQuery,
+  useGetSingleServiceQuery,
+  useCreateServiceMutation,
+  useDeleteServiceMutation,
+} = serviceApi;
