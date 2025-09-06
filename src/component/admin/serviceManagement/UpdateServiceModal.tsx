@@ -1,38 +1,52 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { TServiceInput } from "../../../types/service.type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { serviceValidation } from "../../../schema/serviceValidation";
+import { updateServiceValidation } from "../../../schema/serviceValidation";
 import { toast } from "sonner";
-import { useCreateServiceMutation } from "../../../redux/features/service/serviceApi";
+import {
+  useGetSingleServiceQuery,
+  useUpdateServiceMutation,
+} from "../../../redux/features/service/serviceApi";
 
-type createModalProps = {
-  isCreateModalOpen: boolean;
-  closeCreateModal: () => void;
+// type Update service modal type define
+type updateServiceModalProps = {
+  isUpdateServiceModalOpen: boolean;
+  closeUpdateServiceModal: () => void;
+  id: string;
 };
 
-const CreateServiceModal = ({
-  isCreateModalOpen,
-  closeCreateModal,
-}: createModalProps) => {
-  const [createService, { isLoading }] = useCreateServiceMutation();
+const UpdateServiceModal = ({
+  isUpdateServiceModalOpen,
+  closeUpdateServiceModal,
+  id,
+}: updateServiceModalProps) => {
+  // load service data for modal input
+  const { data: serviceData } = useGetSingleServiceQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
 
+  //   call update service redux rtk query
+  const [updateService, { isLoading }] = useUpdateServiceMutation();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TServiceInput>({ resolver: zodResolver(serviceValidation) });
-  // handle create service form
-
-  const handleCreateServiceForm: SubmitHandler<TServiceInput> = async (
+  } = useForm<Partial<TServiceInput>>({
+    resolver: zodResolver(updateServiceValidation),
+  });
+  console.log(serviceData);
+  // handel update service
+  const handleUpdateServiceForm: SubmitHandler<Partial<TServiceInput>> = async (
     data
   ) => {
     // generate form data
     const formData = new FormData();
-    formData.append("name", data?.name as string);
-    formData.append("description", data?.description as string);
-    formData.append("duration", data?.duration as string);
-    formData.append("price", data?.price as string);
+    for (const [key, value] of Object.entries(data)) {
+      if (value && key !== "image") {
+        formData.append(key, value as string);
+      }
+    }
 
     //  if user upload image file set image file from data
     Array.from(data.image ?? []).forEach((file) => {
@@ -40,28 +54,29 @@ const CreateServiceModal = ({
     });
 
     try {
-      const result = await createService(formData);
+      console.log("hi");
+      const result = await updateService({ formData, id });
       console.log(result);
       if (result && result?.data?.success) {
-        toast?.success("Service create successfully");
+        toast?.success("Service update successfully");
       } else {
-        toast.error("Service create Failed");
+        toast.error("Service update Failed");
       }
       reset();
-      closeCreateModal();
+      closeUpdateServiceModal();
     } catch (err) {
-      toast.error("Service create Failed");
+      toast.error("Service update Failed");
       console.log(err);
     }
   };
 
   return (
     <>
-      <div className={`modal ${isCreateModalOpen ? "modal-open" : ""} `}>
+      <div className={`modal ${isUpdateServiceModalOpen ? "modal-open" : ""} `}>
         <div className="modal-box md:w-1/2 max-w-none bg-brand-primary ">
-          <h3 className="font-bold text-lg text-sky-50">Upload a service</h3>
+          <h3 className="font-bold text-lg text-sky-50">Update service</h3>
           <form
-            onSubmit={handleSubmit(handleCreateServiceForm)}
+            onSubmit={handleSubmit(handleUpdateServiceForm)}
             className="space-y-4 lg:space-y-6 mt-8"
           >
             {/* text input */}
@@ -69,6 +84,7 @@ const CreateServiceModal = ({
               <div>
                 <input
                   {...register("name")}
+                  defaultValue={serviceData?.name}
                   type="text"
                   placeholder="Service name *"
                   className=" w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
@@ -80,6 +96,7 @@ const CreateServiceModal = ({
               <div>
                 <input
                   {...register("description")}
+                  defaultValue={serviceData?.description}
                   type="text"
                   placeholder="Service description *"
                   className=" w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
@@ -91,6 +108,7 @@ const CreateServiceModal = ({
               <div>
                 <input
                   {...register("duration")}
+                  defaultValue={serviceData?.duration}
                   type="text"
                   placeholder="Service duration min. eg- 45 *"
                   className=" w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
@@ -102,6 +120,7 @@ const CreateServiceModal = ({
               <div>
                 <input
                   {...register("price")}
+                  defaultValue={serviceData?.price}
                   type="text"
                   placeholder="Service price *"
                   className=" w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5"
@@ -126,7 +145,7 @@ const CreateServiceModal = ({
             <div className="flex justify-end gap-2 text-sky-50 mt-8">
               <button
                 type="button"
-                onClick={() => closeCreateModal()}
+                onClick={() => closeUpdateServiceModal()}
                 className=" cursor-pointer hover:text-sky-200"
               >
                 Cancel
@@ -149,4 +168,4 @@ const CreateServiceModal = ({
   );
 };
 
-export default CreateServiceModal;
+export default UpdateServiceModal;

@@ -6,7 +6,7 @@ import AdminDashboardSidebar from "../component/shared/adminDashboardSidebar/Adm
 
 const AdminDashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(isOpen);
+
   return (
     <>
       <div className="drawer lg:drawer-open">

@@ -58,6 +58,19 @@ const serviceApi = baseApi.injectEndpoints({
         return data;
       },
     }),
+
+    // update service
+    updateService: builder.mutation({
+      query: ({ formData, id }) => ({
+        url: `/service/${id}`,
+        method: "PATCH",
+        body: formData,
+      }),
+      invalidatesTags: ["service"],
+      transformResponse: (data) => {
+        return data;
+      },
+    }),
   }),
 });
 
@@ -66,4 +79,5 @@ export const {
   useGetSingleServiceQuery,
   useCreateServiceMutation,
   useDeleteServiceMutation,
+  useUpdateServiceMutation,
 } = serviceApi;

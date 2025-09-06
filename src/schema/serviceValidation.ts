@@ -63,6 +63,50 @@ export const serviceValidation = z.object({
           return false;
         }
       },
-      { message: "Image must be at least 600x400 pixels" }
+      { message: "Image must be at least 600x450 pixels" }
     ),
+});
+
+export const updateServiceValidation = z.object({
+  name: z.string().trim().optional(),
+
+  description: z.string().trim().optional(),
+  price: z
+    .string()
+    .trim()
+    .refine((val) => !val || Number(val) >= 0, {
+      message: "Price must be positive number",
+    })
+    .optional(),
+  duration: z
+    .string()
+    .trim()
+    .refine((val) => !val || Number(val) >= 0, {
+      message: "Quantity must be positive number",
+    })
+    .optional(),
+  image: z
+    .instanceof(FileList)
+    .refine(
+      (files) =>
+        files.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files[0]?.type),
+      {
+        message: "Only .jpg, .png, and .webp formats are supported",
+      }
+    )
+    .refine(
+      async (files) => {
+        try {
+          if (files?.length > 0) {
+            const { width, height } = await getImageDimensions(files[0]);
+            return width === 600 && height === 450;
+          }
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { message: "Image must be at least 600x450 pixels" }
+    )
+    .optional(),
 });
