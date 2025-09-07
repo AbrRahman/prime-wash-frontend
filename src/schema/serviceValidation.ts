@@ -32,7 +32,7 @@ const getImageDimensions = (
 
 // create product validation schema
 export const serviceValidation = z.object({
-  name: z.string().trim().min(1, "Product name is required"),
+  name: z.string().trim().min(1, "Service name is required"),
 
   description: z.string().trim().min(1, "Description required"),
   price: z

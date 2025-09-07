@@ -7,6 +7,7 @@ type TSlotParams = {
 const bookingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllSlot: builder.query({
+      providesTags: ["slot"],
       query: (args) => {
         const params = new URLSearchParams();
         if (args) {

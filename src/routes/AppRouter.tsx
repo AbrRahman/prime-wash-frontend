@@ -14,6 +14,7 @@ import Register from "../pages/register/Register";
 import Login from "../pages/login/Login";
 import Review from "../pages/review/Review";
 import ServiceManagement from "../pages/admin/serviceManagemnet/ServiceManagement";
+import SlotManagement from "../pages/admin/slotManagement/SlotManagement";
 
 const appRouter = createBrowserRouter([
   {
@@ -51,7 +52,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin-dashboard",
     element: <AdminDashboardLayout />,
-    children: [{ path: "service-management", element: <ServiceManagement /> }],
+    children: [
+      { path: "service-management", element: <ServiceManagement /> },
+      { path: "slot-management", element: <SlotManagement /> },
+    ],
   },
   {
     path: "*",
