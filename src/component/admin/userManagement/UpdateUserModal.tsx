@@ -1,99 +1,90 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { updateSlotValidation } from "../../../schema/slotValidation";
 import {
-  useGetSingleSlotQuery,
-  useUpdateSlotMutation,
-} from "../../../redux/features/slot/slotApi";
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+} from "../../../redux/features/auth/authApi";
+import { updateUpdateValidation } from "../../../schema/userValidation";
 
-type updateSlotModalProps = {
-  isUpdateSlotModalOpen: boolean;
-  closeUpdateSlotModal: () => void;
+type updateUserModalProps = {
+  isUpdateUserModalOpen: boolean;
+  closeUpdateUserModal: () => void;
   id: string;
 };
 
-type TSlotInput = {
-  isBooked: "booked" | "available";
+type TUserInput = {
+  role: "user" | "admin";
 };
 
-const UpdateSlotModal = ({
-  isUpdateSlotModalOpen,
-  closeUpdateSlotModal,
+const UpdateUserModal = ({
+  isUpdateUserModalOpen,
+  closeUpdateUserModal,
   id,
-}: updateSlotModalProps) => {
-  // update slot data rtk query api call
-  const [updateSlot, { isLoading }] = useUpdateSlotMutation();
+}: updateUserModalProps) => {
+  // update User data rtk query api call
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
 
-  //   get slot data
-  const { data: SlotData } = useGetSingleSlotQuery(id, {
+  //   get User data
+  const { data: UserData } = useGetSingleUserQuery(id, {
     refetchOnMountOrArgChange: true,
   });
-  console.log(SlotData);
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TSlotInput>({ resolver: zodResolver(updateSlotValidation) });
+  } = useForm<TUserInput>({ resolver: zodResolver(updateUpdateValidation) });
 
-  // handle Update slot form
-  const handleUpdateSlotForm: SubmitHandler<TSlotInput> = async (data) => {
-    if (SlotData?.isBooked == data?.isBooked) {
-      closeUpdateSlotModal();
-      toast.error(`Already booking status ${data?.isBooked}`);
+  // handle Update User form
+  const handleUpdateUserForm: SubmitHandler<TUserInput> = async (data) => {
+    if (UserData?.role == data?.role) {
+      closeUpdateUserModal();
+      toast.error(`Already role is ${data?.role}`);
       return;
     }
     try {
-      const result = await updateSlot({ payload: data, id });
+      const result = await updateUser({ id, payload: data });
       console.log(result);
       if (result && result?.data?.success) {
-        toast?.success("Slot update successfully");
+        toast?.success("User role update successfully");
       } else {
-        toast.error("Slot update Failed");
+        toast.error("User role update Failed");
       }
       reset();
-      closeUpdateSlotModal();
+      closeUpdateUserModal();
     } catch (err) {
-      toast.error("Slot update Failed");
+      toast.error("User role update Failed");
       console.log(err);
     }
   };
 
   return (
     <>
-      <div className={`modal ${isUpdateSlotModalOpen ? "modal-open" : ""} `}>
+      <div className={`modal ${isUpdateUserModalOpen ? "modal-open" : ""} `}>
         <div className="modal-box bg-brand-primary ">
-          <h3 className="font-bold text-lg text-sky-50">
-            Update Booking Status
-          </h3>
+          <h3 className="font-bold text-lg text-sky-50">Update user Role</h3>
           <form
-            onSubmit={handleSubmit(handleUpdateSlotForm)}
+            onSubmit={handleSubmit(handleUpdateUserForm)}
             className="space-y-4 lg:space-y-6 mt-8"
           >
             {/* text input */}
             <div className="space-y-4">
               <div>
                 <select
-                  {...register("isBooked")}
+                  {...register("role")}
                   className=" w-full border-1 border-cyan-500 rounded-lg focus:border-sky-50 text-sky-50 px-2.5 py-1.5 bg-brand-primary cursor-pointer"
                 >
-                  <option
-                    value="booked"
-                    selected={SlotData?.isBooked == "booked"}
-                  >
-                    Booked
+                  <option value="user" selected={UserData?.role == "user"}>
+                    User
                   </option>
-                  <option
-                    value="available"
-                    selected={SlotData?.isBooked == "available"}
-                  >
-                    Available
+                  <option value="admin" selected={UserData?.role == "admin"}>
+                    Admin
                   </option>
                 </select>
                 <p className="text-red-500 text-sm ml-1">
-                  {errors?.isBooked?.message}
+                  {errors?.role?.message}
                 </p>
               </div>
             </div>
@@ -101,7 +92,7 @@ const UpdateSlotModal = ({
             <div className="flex justify-end gap-2 text-sky-50 mt-8">
               <button
                 type="button"
-                onClick={() => closeUpdateSlotModal()}
+                onClick={() => closeUpdateUserModal()}
                 className=" cursor-pointer hover:text-sky-200"
               >
                 Cancel
@@ -124,4 +115,4 @@ const UpdateSlotModal = ({
   );
 };
 
-export default UpdateSlotModal;
+export default UpdateUserModal;

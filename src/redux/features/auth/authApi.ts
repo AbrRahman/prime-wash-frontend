@@ -60,6 +60,46 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["profile"],
     }),
+
+    // get all user by admin
+    getAllUser: builder.query({
+      query: () => ({
+        url: "/user",
+        method: "GET",
+      }),
+      transformResponse: (data) => {
+        return data?.data;
+      },
+      providesTags: ["user"],
+    }),
+    // get single user
+    getSingleUser: builder.query({
+      query: (id) => ({
+        url: `/user/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (data) => {
+        return data?.data;
+      },
+      providesTags: ["user"],
+    }),
+    // update user profile
+    updateUser: builder.mutation({
+      query: ({ id, payload }) => ({
+        url: `/user/${id}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["user"],
+    }),
+    // update user profile
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/user/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
@@ -70,4 +110,8 @@ export const {
   useGetUserProfileQuery,
   useUpdateProfileMutation,
   usePasswordChangeMutation,
+  useGetAllUserQuery,
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
 } = authApi;

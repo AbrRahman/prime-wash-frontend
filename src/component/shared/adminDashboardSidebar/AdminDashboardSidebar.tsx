@@ -47,12 +47,18 @@ const AdminDashboardSidebar = ({ handleSidebar }: TAdminSidebarProps) => {
           </Link>
         </li>
         <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
-          <Link to="/dashboard/upcoming-booking" className="justify-between">
+          <Link
+            to="/admin-dashboard/user-management"
+            className="justify-between"
+          >
             User Management
           </Link>
         </li>
         <li className="text-sky-50 hover:bg-cyan-600 focus:bg-cyan-600 transition duration-300 rounded-sm">
-          <Link to="/dashboard/upcoming-booking" className="justify-between">
+          <Link
+            to="/admin-dashboard/booking-management"
+            className="justify-between"
+          >
             See All Booking
           </Link>
         </li>

@@ -1,3 +1,4 @@
+import type { TUserData } from "./auth.type";
 import type { TService } from "./service.type";
 import type { TSlot } from "./slot.type";
 
@@ -10,6 +11,7 @@ export type TBooking = {
 
 export type TBookingData = {
   _id: string;
+  customer?: TUserData;
   slot: TSlot;
   service: TService;
   vehicleType: string;

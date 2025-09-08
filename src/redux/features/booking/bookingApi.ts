@@ -61,7 +61,7 @@ const bookingApi = baseApi.injectEndpoints({
         return data?.data;
       },
     }),
-    // get my all booking
+    // get my upcoming booking
     getMyUpcomingBooking: builder.query({
       query: () => ({
         url: "/booking/my-upcoming-booking",
@@ -70,6 +70,28 @@ const bookingApi = baseApi.injectEndpoints({
       transformResponse: (data) => {
         return data?.data;
       },
+    }),
+    // get all booking by admin
+    getAllBooking: builder.query({
+      query: () => ({
+        url: "/booking",
+        method: "GET",
+      }),
+      providesTags: ["booking"],
+      transformResponse: (data) => {
+        return data?.data;
+      },
+    }),
+    // delete a booking by admin
+    deleteBooking: builder.mutation({
+      query: (id) => ({
+        url: `/booking/${id}`,
+        method: "DELETE",
+      }),
+      transformResponse: (data) => {
+        return data;
+      },
+      invalidatesTags: ["booking"],
     }),
   }),
 });
@@ -81,4 +103,6 @@ export const {
   useDeleteUnpaidBookingMutation,
   useGetMyAllBookingQuery,
   useGetMyUpcomingBookingQuery,
+  useGetAllBookingQuery,
+  useDeleteBookingMutation,
 } = bookingApi;
