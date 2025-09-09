@@ -17,6 +17,7 @@ import ServiceManagement from "../pages/admin/serviceManagemnet/ServiceManagemen
 import SlotManagement from "../pages/admin/slotManagement/SlotManagement";
 import UserManagement from "../pages/admin/userManagement/UserManagement";
 import BookingManagement from "../pages/admin/bookingManagement/BookingManagement";
+import Success from "../pages/success/Success";
 
 const appRouter = createBrowserRouter([
   {
@@ -50,6 +51,7 @@ const appRouter = createBrowserRouter([
       },
     ],
   },
+  { path: "/success", element: <Success /> },
 
   {
     path: "/admin-dashboard",
