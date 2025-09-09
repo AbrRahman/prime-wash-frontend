@@ -53,10 +53,15 @@ const UserManagement = () => {
                   <td>{userItem?.email}</td>
                   <td>{userItem?.phone ? userItem?.phone : "Empty"}</td>
                   <td>{userItem?.address ? userItem?.address : "Empty"}</td>
-                  <td>{userItem?.role}</td>
+                  <td>
+                    {userItem?.email === "abrahman2001a@gmail.com"
+                      ? "Super Admin"
+                      : userItem?.role}
+                  </td>
                   <td>
                     <div className="flex gap-5">
                       <button
+                        disabled={userItem?.email === "abrahman2001a@gmail.com"}
                         onClick={() => {
                           setIsUpdateUserModalOpen(true);
                           setUpdateUserId(userItem?._id);
@@ -66,6 +71,7 @@ const UserManagement = () => {
                         <FaEdit className="size-4" />
                       </button>
                       <button
+                        disabled={userItem?.email === "abrahman2001a@gmail.com"}
                         onClick={() => {
                           setIsDeleteUserModalOpen(true);
                           setDeleteUserId(userItem?._id);

@@ -2,10 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/features/hooks";
 import { logOut } from "../../../redux/features/auth/authSlice";
 import { googleLogOut } from "../../../redux/features/auth/firebase/authService";
+import { useGetUserProfileQuery } from "../../../redux/features/auth/authApi";
 
 const Header = () => {
   // const user = false;
   const { user, googleUiu } = useAppSelector((state) => state.auth);
+  const { data: profile } = useGetUserProfileQuery(undefined, { skip: !user });
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -126,7 +129,8 @@ const Header = () => {
                     <div className="w-10 rounded-full">
                       <img
                         alt="Tailwind CSS Navbar component"
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        src={profile?.image}
+                        referrerPolicy="no-referrer"
                       />
                     </div>
                   </div>

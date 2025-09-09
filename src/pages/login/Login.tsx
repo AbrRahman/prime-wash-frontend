@@ -60,8 +60,13 @@ const Login = () => {
       const user = await verifyToken(result?.data?.accessToken);
       dispatch(setUser({ user, token: result?.data?.accessToken, uid: null }));
       toast.success("Login ");
+      console.log(user.role);
+      if (user.role == "admin") {
+        console.log("hi");
 
-      navigate(from, { replace: true });
+        return navigate("/admin-dashboard/service-management");
+      }
+      return navigate(from, { replace: true });
     } catch (err) {
       toast.error("Login failed");
       console.log(err);

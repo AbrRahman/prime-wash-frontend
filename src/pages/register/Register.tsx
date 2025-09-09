@@ -56,7 +56,7 @@ const Register = () => {
     if (!watchImage?.length) {
       formData.append(
         "image",
-        "https://res.cloudinary.com/dmhfrwdq3/image/upload/v1756731311/file.png"
+        "https://res.cloudinary.com/dmhfrwdq3/image/upload/v1757393705/user_8895458_f5usma.png"
       );
     }
     //  if user upload image file set image file from data

@@ -18,6 +18,8 @@ import SlotManagement from "../pages/admin/slotManagement/SlotManagement";
 import UserManagement from "../pages/admin/userManagement/UserManagement";
 import BookingManagement from "../pages/admin/bookingManagement/BookingManagement";
 import Success from "../pages/success/Success";
+import UserPrivateRoute from "./UserPrivateRoute";
+import AdminPrivateRoute from "./AdminPrivateRoute";
 
 const appRouter = createBrowserRouter([
   {
@@ -33,12 +35,18 @@ const appRouter = createBrowserRouter([
       { path: "/reviews", element: <Review /> },
       {
         path: "/dashboard",
-        element: <UserLayout />,
+        element: (
+          <UserPrivateRoute>
+            <UserLayout />{" "}
+          </UserPrivateRoute>
+        ),
+
         children: [
           {
             path: "profile",
             element: <ProfileDetails />,
           },
+
           {
             path: "my-booking",
             element: <MyBookings />,
@@ -55,7 +63,11 @@ const appRouter = createBrowserRouter([
 
   {
     path: "/admin-dashboard",
-    element: <AdminDashboardLayout />,
+    element: (
+      <AdminPrivateRoute>
+        <AdminDashboardLayout />
+      </AdminPrivateRoute>
+    ),
     children: [
       { path: "service-management", element: <ServiceManagement /> },
       { path: "slot-management", element: <SlotManagement /> },
