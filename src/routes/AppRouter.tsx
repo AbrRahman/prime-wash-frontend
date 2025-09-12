@@ -30,14 +30,20 @@ const appRouter = createBrowserRouter([
       { path: "/services", element: <Services /> },
       { path: "/services/:id", element: <ServiceDetails /> },
       { path: "/booking", element: <Booking /> },
-      { path: "/register", element: <Register /> },
-      { path: "/login", element: <Login /> },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
       { path: "/reviews", element: <Review /> },
       {
         path: "/dashboard",
         element: (
           <UserPrivateRoute>
-            <UserLayout />{" "}
+            <UserLayout />
           </UserPrivateRoute>
         ),
 

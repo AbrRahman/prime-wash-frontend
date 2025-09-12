@@ -43,7 +43,10 @@ const BookingForm = () => {
   const handleBooking: SubmitHandler<TBooking> = async (bookingInfo) => {
     // check user is login or not
     if (!user) {
-      navigate("/login");
+      navigate("/login", {
+        state: { from: { pathname: "/booking" }, bookingInfo },
+        replace: true,
+      });
       return;
     }
 

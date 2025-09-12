@@ -17,7 +17,6 @@ const DeleteUserModal = ({
   const handleDeleteUser = async () => {
     try {
       const result = await deleteUser(id);
-      console.log(result);
       if (result?.data?.success) {
         toast.success("Delete successfully");
       } else {

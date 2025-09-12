@@ -41,7 +41,6 @@ const CreateServiceModal = ({
 
     try {
       const result = await createService(formData);
-      console.log(result);
       if (result && result?.data?.success) {
         toast?.success("Service create successfully");
       } else {

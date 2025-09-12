@@ -7,14 +7,15 @@ import {
   useLoginMutation,
 } from "../../redux/features/auth/authApi";
 import { verifyToken } from "../../utils/verifyToken";
-import { useAppDispatch } from "../../redux/features/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
 import { setUser } from "../../redux/features/auth/authSlice";
 import { toast } from "sonner";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginValidation from "../../schema/loginValidation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { setActiveMenu } from "../../redux/features/header/headerSlice";
 
 type TLoginInput = {
   email: string;
@@ -26,10 +27,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [googleLogin] = useGoogleLoginMutation();
   const [login, { isLoading }] = useLoginMutation();
+  const { user: stateUser } = useAppSelector((state) => state.auth);
+  const [homeRedirect, setHomeRedirect] = useState(true);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // if login user present uer cant not go login page throw rul
 
   const {
     register,
@@ -58,15 +63,15 @@ const Login = () => {
       }
 
       const user = await verifyToken(result?.data?.accessToken);
+      setHomeRedirect(false);
       dispatch(setUser({ user, token: result?.data?.accessToken, uid: null }));
       toast.success("Login ");
-      console.log(user.role);
-      if (user.role == "admin") {
-        console.log("hi");
 
-        return navigate("/admin-dashboard/service-management");
+      if (user.role === "admin") {
+        navigate("/admin-dashboard/service-management", { replace: true });
+      } else if (user?.role === "user") {
+        navigate(from, { replace: true });
       }
-      return navigate(from, { replace: true });
     } catch (err) {
       toast.error("Login failed");
       console.log(err);
@@ -86,14 +91,12 @@ const Login = () => {
           email: email,
           image: photoURL,
         });
-        console.log(data);
-        console.log(data?.data?.accessToken);
         const user = await verifyToken(data?.data?.accessToken);
         if (!user) {
           toast.error("Login failed");
           return;
         }
-
+        setHomeRedirect(false);
         dispatch(setUser({ user, token: data?.data?.accessToken, uid }));
         toast.success("Login ");
         navigate(from, { replace: true });
@@ -103,6 +106,16 @@ const Login = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (stateUser && homeRedirect) {
+      navigate("/");
+    }
+  }, [stateUser, homeRedirect, navigate]);
+  // set header active menu
+  useEffect(() => {
+    dispatch(setActiveMenu("Login"));
+  }, [dispatch]);
 
   return (
     <>

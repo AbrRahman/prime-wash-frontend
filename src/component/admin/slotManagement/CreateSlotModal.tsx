@@ -43,7 +43,6 @@ const CreateSlotModal = ({
     }
     try {
       const result = await createSlot({ ...data, date: slotDate });
-      console.log(result);
       if (result && result?.data?.success) {
         toast?.success("Slot create successfully");
       } else {

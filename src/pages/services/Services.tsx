@@ -5,7 +5,10 @@ import type { TService } from "../../types/service.type";
 import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { setSearchTerm } from "../../redux/features/service/serviceSlice";
-
+import ServiceCardSkeleton from "../../component/services/ServiceCardSkeleton";
+import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { setActiveMenu } from "../../redux/features/header/headerSlice";
 type TSearchInput = {
   search: string;
 };
@@ -16,7 +19,7 @@ const Services = () => {
   );
   const dispatch = useAppDispatch();
   // fetch service data using rtk query
-  const { data: serviceData } = useGetAllServiceQuery([
+  const { data: serviceData, isLoading } = useGetAllServiceQuery([
     { name: "searchTerm", value: searchTerm },
     { name: "duration", value: duration },
     { name: "maxPrice", value: maxPrice },
@@ -27,6 +30,11 @@ const Services = () => {
   const handleSearch: SubmitHandler<TSearchInput> = (data) => {
     dispatch(setSearchTerm(data?.search));
   };
+
+  // set header active menu
+  useEffect(() => {
+    dispatch(setActiveMenu("Service"));
+  }, [dispatch]);
   return (
     <>
       <div className="bg-brand-primary">
@@ -64,11 +72,31 @@ const Services = () => {
               </div>
 
               {/* display product */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                animate="visible"
+                viewport={{ once: true }}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.3 },
+                  },
+                }}
+                className="grid grid-cols-1 lg:grid-cols-3 gap-4"
+              >
+                {/* show loading skeleton */}
+
+                {isLoading &&
+                  [...Array(6).keys()].map((_, idx) => (
+                    <ServiceCardSkeleton key={idx} />
+                  ))}
+
                 {serviceData?.map((service: TService) => (
                   <ServiceCard key={service?._id} service={service} />
                 ))}
-              </div>
+              </motion.div>
               {!serviceData?.length && (
                 <div className=" flex justify-center item-center py-12 lg:py-20">
                   <h3 className=" text-sky-50 text-xl">

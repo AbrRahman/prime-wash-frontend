@@ -3,9 +3,10 @@ import { useGetAllServiceQuery } from "../../redux/features/service/serviceApi";
 import type { TService } from "../../types/service.type";
 import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
 import { setService, setSlot } from "../../redux/features/booking/bookingSlice";
+import BookingServiceSelectionSkeleton from "./BookingServiceSelectionSkeleton";
 
 const BookingServiceSelection = () => {
-  const { data: serviceData } = useGetAllServiceQuery(undefined);
+  const { data: serviceData, isLoading } = useGetAllServiceQuery(undefined);
   const { service } = useAppSelector((state) => state?.booking);
   // set service id global state
   const dispatch = useAppDispatch();
@@ -21,7 +22,10 @@ const BookingServiceSelection = () => {
         </h3>
 
         <div className="grid gap-1 mb-3 grid-cols-3 sm:grid-cols-4">
-         
+          {isLoading &&
+            [...Array(6).keys()].map((_, idx) => (
+              <BookingServiceSelectionSkeleton key={idx} />
+            ))}
           {(serviceData?.length > 9
             ? serviceData?.slice(0, 9)
             : serviceData

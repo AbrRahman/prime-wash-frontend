@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import ReviewsForm from "./ReviewsForm";
 import { useGetAllReviewQuery } from "../../../redux/features/review/reviewApi";
 import type { TReview } from "../../../types/review.types";
+import ReviewCartSkeleton from "../../reviews/ReviewsCartSkeleton";
 const HomeReviewsAndRatings = () => {
-  const { data: reviewData } = useGetAllReviewQuery(undefined);
+  const { data: reviewData, isLoading } = useGetAllReviewQuery(undefined);
 
   return (
     <>
       <section className="bg-brand-primary">
-        <div className="container mx-auto px-4 py-12 lg:py-20">
+        <div className="container mx-auto px-4 pt-12 lg:pt-20">
           {/* section heading */}
           <motion.h1
             className=" text-sky-50 text-2xl md:text-3xl lg:text-4xl text-center font-bold "
@@ -37,11 +38,17 @@ const HomeReviewsAndRatings = () => {
                   },
                 }}
               >
+                {/* loading skeleton */}
+                {isLoading &&
+                  [...Array(2).keys()].map((_, idx) => (
+                    <ReviewCartSkeleton key={idx} />
+                  ))}
+                {/* loading data */}
                 {(reviewData?.length > 2
                   ? reviewData.slice(0, 2)
                   : reviewData
                 )?.map((review: TReview) => (
-                  <ReviewCart review={review} />
+                  <ReviewCart key={review?._id} review={review} />
                 ))}
               </motion.div>
               <motion.div

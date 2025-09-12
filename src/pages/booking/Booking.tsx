@@ -3,10 +3,18 @@ import BookingForm from "../../component/booking/BookingForm";
 import BookingService from "../../component/booking/BookingService";
 import BookingServiceSelection from "../../component/booking/BookingServiceSelection";
 import CalendarAndSlot from "../../component/calendarAndSlot/CalendarAndSlot";
+import { useEffect } from "react";
+import { useAppDispatch } from "../../redux/features/hooks";
+import { setActiveMenu } from "../../redux/features/header/headerSlice";
 
 const Booking = () => {
+  const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const queryParams = searchParams.get("from");
+  // set header active menu
+  useEffect(() => {
+    dispatch(setActiveMenu("Booking"));
+  }, [dispatch]);
   return (
     <>
       <div className="bg-brand-primary">

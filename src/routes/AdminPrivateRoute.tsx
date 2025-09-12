@@ -6,7 +6,6 @@ import { toast } from "sonner";
 const AdminPrivateRoute = ({ children }: { children: ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
   const location = useLocation();
-  console.log(user);
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace={true} />;
   }

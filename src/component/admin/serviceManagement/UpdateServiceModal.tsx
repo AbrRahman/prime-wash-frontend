@@ -35,7 +35,7 @@ const UpdateServiceModal = ({
   } = useForm<Partial<TServiceInput>>({
     resolver: zodResolver(updateServiceValidation),
   });
-  console.log(serviceData);
+
   // handel update service
   const handleUpdateServiceForm: SubmitHandler<Partial<TServiceInput>> = async (
     data
@@ -54,9 +54,8 @@ const UpdateServiceModal = ({
     });
 
     try {
-      console.log("hi");
       const result = await updateService({ formData, id });
-      console.log(result);
+
       if (result && result?.data?.success) {
         toast?.success("Service update successfully");
       } else {

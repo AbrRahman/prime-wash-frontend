@@ -17,7 +17,6 @@ const DeleteBookingModal = ({
   const handleDeleteBooking = async () => {
     try {
       const result = await deleteBooking(id);
-      console.log(result);
       if (result?.data?.success) {
         toast.success("Delete successfully");
       } else {

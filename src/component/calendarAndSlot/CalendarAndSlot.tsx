@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
 import { useGetAllSlotQuery } from "../../redux/features/booking/bookingApi";
 import type { TSlot } from "../../types/slot.type";
 import convertToTwelveHourFormat from "../../utils/convertToTwelveHourFormat";
+import SlotSkeleton from "./SlotSkeleton";
 
 const CalendarAndSlot = () => {
   const dispatch = useAppDispatch();
@@ -19,7 +20,7 @@ const CalendarAndSlot = () => {
   );
 
   // const slot = { startTime: "12:00", endTime: "13:00", isBooked: true };
-  const { data: slotData } = useGetAllSlotQuery([
+  const { data: slotData, isLoading } = useGetAllSlotQuery([
     { name: "serviceId", value: service?._id ? service?._id : "" },
     { name: "date", value: bookingDate },
   ]);
@@ -42,6 +43,10 @@ const CalendarAndSlot = () => {
             Available Slot
           </h3>
           <div className="flex gap-2 flex-wrap mt-2.5">
+            {/* display loading skeleton */}
+            {isLoading &&
+              [...Array(6).keys()].map((_, idx) => <SlotSkeleton key={idx} />)}
+            {/* display slot */}
             {(service?._id ? slotData : slotData?.slice(0, 8))?.map(
               (slotItem: TSlot) => (
                 <button
@@ -64,6 +69,11 @@ const CalendarAndSlot = () => {
                     )}
                 </button>
               )
+            )}
+            {!slotData?.length && (
+              <p className="text-slate-400 text-center py-4">
+                ⏰ No slots available for this date. Please try another day.
+              </p>
             )}
           </div>
         </div>

@@ -29,7 +29,6 @@ const UpdateSlotModal = ({
   const { data: SlotData } = useGetSingleSlotQuery(id, {
     refetchOnMountOrArgChange: true,
   });
-  console.log(SlotData);
 
   const {
     register,
@@ -47,7 +46,7 @@ const UpdateSlotModal = ({
     }
     try {
       const result = await updateSlot({ payload: data, id });
-      console.log(result);
+
       if (result && result?.data?.success) {
         toast?.success("Slot update successfully");
       } else {

@@ -20,6 +20,14 @@ const UpcomingBooking = () => {
             Upcoming Booking
           </h1>
         </div>
+        {!upcomingBookingData?.length && (
+          <div className=" flex justify-center items-center mt-8">
+            <p className="text-sky-50 font-semibold text-base mt-2">
+              You don"t have any upcoming bookings scheduled. Book a service to
+              secure your spot!
+            </p>
+          </div>
+        )}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-3">
           {upcomingBookingData?.map((upcomingBookingItem: TBookingData) => (
             <div

@@ -1,7 +1,15 @@
 import { Outlet } from "react-router-dom";
 import MyProfilePhoto from "../component/profile/MyProfilePhoto";
+import { useEffect } from "react";
+import { useAppDispatch } from "../redux/features/hooks";
+import { setActiveMenu } from "../redux/features/header/headerSlice";
 
 const UserLayout = () => {
+  const dispatch = useAppDispatch();
+  // set header active menu
+  useEffect(() => {
+    dispatch(setActiveMenu("userLayout"));
+  }, [dispatch]);
   return (
     <>
       <div className="bg-brand-primary ">

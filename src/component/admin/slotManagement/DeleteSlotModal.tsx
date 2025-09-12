@@ -17,8 +17,6 @@ const DeleteSlotModal = ({
   const handleDeleteSlot = async () => {
     try {
       const result = await deleteSlot(id);
-      console.log(result);
-      console.log(result);
       if (result?.data?.success) {
         toast.success("Delete successfully");
       } else {

@@ -8,7 +8,6 @@ import type { TReview } from "../../types/review.types";
 
 const ReviewCart = ({ review }: { review: TReview }) => {
   // calculate rating
-  console.log(review);
   const Rating = ({ value, outOf = 5 }: TRatingProps) => {
     const star = [];
     for (let i = 1; i <= outOf; i++) {

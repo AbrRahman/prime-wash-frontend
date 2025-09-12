@@ -108,7 +108,6 @@ const ProfileDetails = () => {
       } else {
         toast.error("Something went wrong. Try again later.");
       }
-      console.log(result);
     } catch (err) {
       toast.error("Something went wrong. Try again later.");
       console.log(err);

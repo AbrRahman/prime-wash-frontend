@@ -46,7 +46,6 @@ const UpdateUserModal = ({
     }
     try {
       const result = await updateUser({ id, payload: data });
-      console.log(result);
       if (result && result?.data?.success) {
         toast?.success("User role update successfully");
       } else {

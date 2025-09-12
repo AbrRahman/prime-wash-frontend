@@ -25,8 +25,7 @@ const ServiceSideBar = () => {
     dispatch(setMaxPrice(""));
     dispatch(setDuration(""));
   };
-  console.log(maxPrice);
-  // console.log(duration);
+
   return (
     <>
       <div className="rounded-lg text-white bg-brand-secondary px-6 py-8 sticky top-24 space-y-3">

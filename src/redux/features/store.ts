@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import serviceReducer from "../features/service/serviceSlice";
 import bookingReducer from "../features/booking/bookingSlice";
+import headerReducer from "../features/header/headerSlice";
 import {
   persistReducer,
   persistStore,
@@ -27,6 +28,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     service: serviceReducer,
     booking: bookingReducer,
+    header: headerReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
 

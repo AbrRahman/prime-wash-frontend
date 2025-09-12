@@ -2,9 +2,18 @@ import { motion } from "framer-motion";
 import { useGetAllReviewQuery } from "../../redux/features/review/reviewApi";
 import ReviewCart from "../../component/reviews/ReviewCart";
 import type { TReview } from "../../types/review.types";
+import ReviewCartSkeleton from "../../component/reviews/ReviewsCartSkeleton";
+import { useEffect } from "react";
+import { useAppDispatch } from "../../redux/features/hooks";
+import { setActiveMenu } from "../../redux/features/header/headerSlice";
 
 const Review = () => {
-  const { data: reviewData } = useGetAllReviewQuery(undefined);
+  const dispatch=useAppDispatch()
+  const { data: reviewData, isLoading } = useGetAllReviewQuery(undefined);
+    // set header active menu
+    useEffect(() => {
+      dispatch(setActiveMenu("Review"));
+    }, [dispatch]);
   return (
     <>
       <div className="bg-brand-primary">
@@ -34,6 +43,12 @@ const Review = () => {
                 },
               }}
             >
+              {/*show review skeleton */}
+              {isLoading &&
+                [...Array(4).keys()].map((_, idx) => (
+                  <ReviewCartSkeleton key={idx} />
+                ))}
+              {/* display reviews */}
               {reviewData?.map((review: TReview) => (
                 <ReviewCart review={review} />
               ))}

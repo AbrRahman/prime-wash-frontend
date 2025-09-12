@@ -17,7 +17,6 @@ const DeleteServiceModal = ({
   const handleDeleteService = async () => {
     try {
       const result = await deleteService(id);
-      console.log(result);
       if (result?.data?.success) {
         toast.success("Delete successfully");
       } else {

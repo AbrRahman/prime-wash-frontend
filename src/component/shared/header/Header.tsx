@@ -3,10 +3,11 @@ import { useAppDispatch, useAppSelector } from "../../../redux/features/hooks";
 import { logOut } from "../../../redux/features/auth/authSlice";
 import { googleLogOut } from "../../../redux/features/auth/firebase/authService";
 import { useGetUserProfileQuery } from "../../../redux/features/auth/authApi";
-
+import { HashLink } from "react-router-hash-link";
 const Header = () => {
   // const user = false;
   const { user, googleUiu } = useAppSelector((state) => state.auth);
+  const { activeMenu } = useAppSelector((state) => state.header);
   const { data: profile } = useGetUserProfileQuery(undefined, { skip: !user });
 
   const dispatch = useAppDispatch();
@@ -24,6 +25,7 @@ const Header = () => {
     { name: "Home", path: "/" },
     { name: "Service", path: "/services" },
     { name: "Booking", path: "/booking" },
+    { name: "Review", path: "/reviews" },
   ];
 
   return (
@@ -62,13 +64,25 @@ const Header = () => {
                   {menuItems.map((item, index) => (
                     <li
                       key={index}
-                      className="text-sky-50 hover:bg-[#0891b2] focus:bg-cyan-600 transition duration-300"
+                      className={`text-sky-50 ${
+                        activeMenu == item.name ? "bg-[#0891b2]" : ""
+                      } hover:bg-[#0891b2] focus:bg-cyan-600 transition duration-300`}
                     >
                       <Link to={item?.path} className="text-sky-50 ">
                         {item?.name}
                       </Link>
                     </li>
                   ))}
+                  <li>
+                    <HashLink
+                      to="/#faq"
+                      className={`text-sky-50 ${
+                        activeMenu == "faq" ? "bg-[#0891b2]" : ""
+                      } hover:bg-[#0891b2] focus:bg-cyan-600 transition duration-300`}
+                    >
+                      FAQ
+                    </HashLink>
+                  </li>
                 </ul>
               </div>
               {/* brand logo */}
@@ -87,12 +101,24 @@ const Header = () => {
                   <li key={index}>
                     <Link
                       to={item?.path}
-                      className="text-sky-50  hover:bg-cyan-600 tracking-wide font-semibold transition duration-300 mr-3.5"
+                      className={`text-sky-50 ${
+                        activeMenu == item.name ? "bg-cyan-600 " : ""
+                      } hover:bg-cyan-600 tracking-wide font-semibold transition duration-300 mr-3.5`}
                     >
                       {item?.name}
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <HashLink
+                    to="/#faq"
+                    className={`text-sky-50 ${
+                      activeMenu == "faq" ? "bg-cyan-600 " : ""
+                    } hover:bg-cyan-600 tracking-wide font-semibold transition duration-300 mr-3.5`}
+                  >
+                    FAQ
+                  </HashLink>
+                </li>
               </ul>
             </div>
             {/* user profile */}

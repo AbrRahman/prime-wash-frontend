@@ -11,12 +11,14 @@ import {
 import { toast } from "sonner";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { TErrorResponse } from "../../types/error.type";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loginWithGoogle } from "../../redux/features/auth/firebase/authService";
 import { verifyToken } from "../../utils/verifyToken";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/features/auth/authSlice";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useAppSelector } from "../../redux/features/hooks";
+import { setActiveMenu } from "../../redux/features/header/headerSlice";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +30,8 @@ const Register = () => {
   const location = useLocation();
 
   const [duplicateEmailError, setDuplicateEmailError] = useState("");
-
+  const { user: stateUser } = useAppSelector((state) => state.auth);
+  const [homeRedirect, setHomeRedirect] = useState(true);
   const {
     register,
     handleSubmit,
@@ -63,9 +66,9 @@ const Register = () => {
     Array.from(data.image ?? []).forEach((file) => {
       formData.append("file", file);
     });
-
+    setHomeRedirect(false);
     const result = await registerUser(formData);
-    // console.log(result);
+
     if (result?.data?.success) {
       toast.success("Register successfully");
       reset();
@@ -99,7 +102,7 @@ const Register = () => {
         });
 
         const user = await verifyToken(data?.data?.accessToken);
-
+        setHomeRedirect(false);
         dispatch(setUser({ user, token: data?.data?.accessToken, uid }));
         toast.success("Login ");
         const from = location.state?.from?.pathname || "/";
@@ -110,6 +113,16 @@ const Register = () => {
       console.log(err);
     }
   };
+  useEffect(() => {
+    if (stateUser && homeRedirect) {
+      navigate("/");
+    }
+  }, [stateUser, homeRedirect, navigate]);
+
+  // set header active menu
+  useEffect(() => {
+    dispatch(setActiveMenu("Register"));
+  }, [dispatch]);
 
   return (
     <>

@@ -9,7 +9,18 @@ const MyBookings = () => {
       <div className="border-b-2 border-dashed pb-6 border-b-brand-primary ">
         <h1 className="text-xl font-semibold text-sky-50">My Bookings</h1>
       </div>
-      <div className="overflow-x-auto">
+      {/* show the empty message */}
+      {!myBookingData?.length && (
+        <div className=" flex justify-center items-center mt-8">
+          <p className="text-sky-50 font-semibold text-base mt-2">
+            Looks like you haven't booked any services. Start by booking your
+            first one!
+          </p>
+        </div>
+      )}
+      <div
+        className={`overflow-x-auto ${!myBookingData?.length ? "hidden" : ""}`}
+      >
         <table className="table">
           {/* head */}
           <thead>

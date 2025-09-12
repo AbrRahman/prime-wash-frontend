@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import ServiceCard from "../../services/ServiceCard";
 import { useGetAllServiceQuery } from "../../../redux/features/service/serviceApi";
 import type { TService } from "../../../types/service.type";
+import ServiceCardSkeleton from "../../services/ServiceCardSkeleton";
 
 const FeaturedServices = () => {
   // fetch service data using rtk query
-  const { data: serviceData } = useGetAllServiceQuery(undefined);
+  const { data: serviceData, isLoading } = useGetAllServiceQuery(undefined);
 
   return (
     <>
@@ -34,6 +35,12 @@ const FeaturedServices = () => {
             }}
             className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8 lg:mt-12"
           >
+            {/* show loading skeleton */}
+            {isLoading &&
+              [...Array(6).keys()].map((_, idx) => (
+                <ServiceCardSkeleton key={idx} />
+              ))}
+            {/* show loading date */}
             {(serviceData?.length > 6
               ? serviceData.slice(0, 6)
               : serviceData
@@ -44,6 +51,7 @@ const FeaturedServices = () => {
           <motion.div
             className="flex justify-center mt-8 lg:mt-12"
             initial={{ opacity: 0, scale: 0.8 }}
+            animate="visible"
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}

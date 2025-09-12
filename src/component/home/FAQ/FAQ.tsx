@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { FiPlus, FiMinus } from "react-icons/fi";
+
 const FAQ = () => {
   const [showFaq, setShowFaq] = useState(0);
 
@@ -39,8 +40,8 @@ const FAQ = () => {
 
   return (
     <>
-      <section className="bg-brand-primary">
-        <div className="container mx-auto px-4 pb-12 lg:pb-20">
+      <section id="faq" className="bg-brand-primary">
+        <div className="container mx-auto px-4 py-12 lg:py-20">
           {/* section heading */}
           <motion.h1
             className=" text-sky-50 text-2xl md:text-3xl lg:text-4xl text-center font-bold "
@@ -68,6 +69,7 @@ const FAQ = () => {
             >
               {faqData.map((faq, index) => (
                 <motion.div
+                  key={index}
                   className="bg-brand-secondary rounded-lg shadow-sm p-6"
                   variants={{
                     hidden: { opacity: 0, y: 50 },
