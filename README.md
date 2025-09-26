@@ -28,7 +28,7 @@ The project combines **modern UI/UX** with a **robust backend** for real-world b
 
 ## ⚡ Tech Stack  
 
-- **Frontend:** React, Redux Toolkit, React Router, Tailwind CSS  
+- **Frontend:** React, Redux Toolkit, React Router, Tailwind CSS, daisyUI  
 - **Backend:** Node.js, Express.js, MongoDB with **Mongoose ODM**, JWT Authentication  
 - **Auth:** Firebase Google Auth + Custom JWT Email/Password Auth  
 - **UI/UX:** Tailwind CSS, Swiper (carousel), Motion (loading animations)  
@@ -82,3 +82,4 @@ The project combines **modern UI/UX** with a **robust backend** for real-world b
 ```bash
 git clone https://github.com/your-username/prime-wash.git
 cd prime-wash
+
