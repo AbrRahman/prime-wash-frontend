@@ -16,12 +16,12 @@ The project combines **modern UI/UX** with a **robust backend** for real-world b
 
 ### 🔗 Demo Links  
 - 🔗 **Live Frontend:** [https://prime-wash.vercel.app/](https://prime-wash.vercel.app/)  
-- 🔗 **Backend GitHub Repository:** [prime-wash-backend](https://github.com/your-username/prime-wash-backend)  
+- 🔗 **Backend GitHub Repository:** [prime-wash-backend](https://github.com/AbrRahman/prime-wash-backend)  
 
 ---
 
 ### 👨‍💼 Admin Demo Access  
-- **Email:** admin@primewash.com  
+- **Email:** abrahman2001a@gmail.com  
 - **Password:** 123456  
 
 ---
@@ -82,4 +82,5 @@ The project combines **modern UI/UX** with a **robust backend** for real-world b
 ```bash
 git clone https://github.com/your-username/prime-wash.git
 cd prime-wash
+
 
