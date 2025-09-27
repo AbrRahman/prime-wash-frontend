@@ -80,7 +80,8 @@ The project combines **modern UI/UX** with a **robust backend** for real-world b
 
 ### Clone the Repository  
 ```bash
-git clone https://github.com/your-username/prime-wash.git
+git clone https://github.com/AbrRahman/prime-wash-frontend.git
 cd prime-wash
+
 
 
