@@ -35,7 +35,7 @@ The project combines **modern UI/UX** with a **robust backend** for real-world b
 - **Payments:** AAMARPAY Integration  
 - **Utilities:** Zod, React Hook Form, Redux Persist, React Countdown, React Datepicker, Sonner (toast)  
 - **Communication:** EmailJS (contact form)  
-- **Deployment:** Vercel (Frontend), Render/other (Backend)  
+- **Deployment:** Vercel (Frontend), Vercel (Backend)  
 
 ---
 
@@ -82,6 +82,7 @@ The project combines **modern UI/UX** with a **robust backend** for real-world b
 ```bash
 git clone https://github.com/AbrRahman/prime-wash-frontend.git
 cd prime-wash
+
 
 
 
